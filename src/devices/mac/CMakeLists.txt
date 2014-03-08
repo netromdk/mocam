@@ -1,7 +1,7 @@
-SET(SNAP snapshot)
+SET(NAME snapshot)
 
 ADD_EXECUTABLE(
-  ${SNAP}
+  ${NAME}
   main.cpp
 
   video.m
@@ -10,4 +10,4 @@ ADD_EXECUTABLE(
   Snapper.m
   )
 
-TARGET_LINK_LIBRARIES(${SNAP} ${MAC_LIBS})
+TARGET_LINK_LIBRARIES(${NAME} ${MAC_LIBS})
