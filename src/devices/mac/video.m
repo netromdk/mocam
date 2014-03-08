@@ -71,7 +71,6 @@ void getSnapshot() {
   }
   
   [snapper release];
-
   [device unlockForConfiguration];
   [device release];
 }

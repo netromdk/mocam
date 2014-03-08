@@ -11,10 +11,21 @@
 }
 
 - (void)dealloc {
-	if (session) [session release];
-	if (inputDevice) [inputDevice release];
-	if (outputDevice)	[outputDevice release];
+  if (session) [session release];
   [super dealloc];
+}
+
+- (void)cleanup {
+  if (inputDevice) {
+    [session removeInput:inputDevice];
+    [inputDevice release];
+    inputDevice = nil;
+  }
+  if (outputDevice)	{
+    [session removeOutput:outputDevice];
+    [outputDevice release];
+    outputDevice = nil;
+  }
 }
 
 -(BOOL)saveFrom:(AVCaptureDevice*)device
@@ -30,6 +41,7 @@
   inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
   if (!inputDevice || ![session canAddInput:inputDevice]) {
     printf("Could not get input device, or could not add to session.\n");
+    [self cleanup];
     return NO;
   }
   [session addInput:inputDevice];
@@ -38,6 +50,7 @@
   outputDevice = [[AVCaptureStillImageOutput alloc] init];
   if (![session canAddOutput:outputDevice]) {
     printf("Can't add output.\n");
+    [self cleanup];
     return NO;
   }
   [outputDevice setOutputSettings:@{AVVideoCodecKey : AVVideoCodecJPEG}];
@@ -69,7 +82,8 @@
 
   printf("Stop recording...\n");
   [session stopRunning];
-  
+
+  [self cleanup];
   return (gotStill == 1 ? YES : NO);
 }
 

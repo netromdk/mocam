@@ -10,6 +10,7 @@
 -(id)init;
 -(void)dealloc;
 
+-(void)cleanup;
 -(BOOL)saveFrom:(AVCaptureDevice*)device toFile:(NSString*)filename;
 
 @end
