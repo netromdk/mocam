@@ -14,9 +14,18 @@ namespace mocam {
     
   }
   
-  std::unique_ptr<VideoDeviceImpl> VideoDeviceImpl::getDefaultDevice() {
-    // TODO: get default from ObjC
-    return std::unique_ptr<VideoDeviceImpl>(new VideoDeviceImpl("dang", "dude"));
+  ImplVDPtr VideoDeviceImpl::getDefaultDevice() {
+    // TODO: get default from ObjC.
+    return ImplVDPtr(new VideoDeviceImpl("dang", "dude"));
+  }
+
+  std::vector<ImplVDPtr> VideoDeviceImpl::getSystemDevices() {
+    // TODO: get from ObjC.
+    std::vector<ImplVDPtr > res;
+    res.push_back(ImplVDPtr(new VideoDeviceImpl("LDKFJ", "First")));
+    res.push_back(ImplVDPtr(new VideoDeviceImpl(")lsd#", "Second")));
+    res.push_back(ImplVDPtr(new VideoDeviceImpl("939fF", "Third")));
+    return res;
   }
 
   std::string VideoDeviceImpl::toString() const {

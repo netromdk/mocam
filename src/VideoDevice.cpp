@@ -1,28 +1,37 @@
 #include "VideoDevice.h"
 
 namespace mocam {
+  class VideoDevice;
+  typedef std::shared_ptr<VideoDevice> VDPtr;  
+  
   VideoDevice::VideoDevice(const std::string &uniqueId) {
-    impl = std::unique_ptr<VideoDeviceImpl>(new VideoDeviceImpl(uniqueId));
+    impl = ImplVDPtr(new VideoDeviceImpl(uniqueId));
   }
   
   VideoDevice::VideoDevice(const std::string &uniqueId,
                            const std::string &name) {
     auto obj = new VideoDeviceImpl(uniqueId, name);
-    impl = std::unique_ptr<VideoDeviceImpl>(obj);
+    impl = ImplVDPtr(obj);
   }
 
-  VideoDevice::VideoDevice(std::unique_ptr<VideoDeviceImpl> &ptr) {
+  VideoDevice::VideoDevice(ImplVDPtr ptr) {
     impl = std::move(ptr);
   }
 
-  std::shared_ptr<VideoDevice> VideoDevice::getDefaultDevice() {
+  VDPtr VideoDevice::getDefaultDevice() {
     auto uptr = VideoDeviceImpl::getDefaultDevice();
-    return std::shared_ptr<VideoDevice>(new VideoDevice(uptr));
+    return VDPtr(new VideoDevice(uptr));
   }
-  /*
-  std::vector<std::shared_ptr<VideoDevice> > VideoDevice::getSystemDevices() {
+
+  std::vector<VDPtr> VideoDevice::getSystemDevices() {
+    auto udevs = VideoDeviceImpl::getSystemDevices();
+    std::vector<VDPtr> devs;
+    for (auto it = udevs.begin(); it != udevs.end(); ++it) {
+      devs.push_back(VDPtr(new VideoDevice(*it)));
+    }
+    return devs;
   }
-  */
+
 
   std::string VideoDevice::getUniqueId() const {
     return impl->getUniqueId();
