@@ -87,4 +87,12 @@
   return (gotStill == 1 ? YES : NO);
 }
 
++(AVCaptureDevice*)getDefaultDevice {
+  return [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+}
+
++(NSArray*)getDevices {
+  return [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+}
+
 @end

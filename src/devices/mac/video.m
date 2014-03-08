@@ -5,15 +5,11 @@
 
 #include "video.h"
 
-AVCaptureDevice *getDefault() {
-  return [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-}
-
 void dumpDevice(AVCaptureDevice *device) {
   printf("%s (%s)",
          [[device localizedName] UTF8String],
          [[device uniqueID] UTF8String]);
-  if (device == getDefault()) {
+  if (device == [Snapper getDefaultDevice]) {
     printf(" (DEFAULT)");
   }
   printf("\n");
@@ -21,8 +17,7 @@ void dumpDevice(AVCaptureDevice *device) {
 
 void dumpDevices() {
   // Get all available devices.
-  for (AVCaptureDevice *device in
-         [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo]) {
+  for (AVCaptureDevice *device in [Snapper getDevices]) {
     dumpDevice(device);
   }
 }
@@ -51,7 +46,7 @@ void confAndLockDevice(AVCaptureDevice *device) {
 }
 
 void getSnapshot() {
-  AVCaptureDevice *device = getDefault();
+  AVCaptureDevice *device = [Snapper getDefaultDevice];
   if (device == nil) {
     printf("Could not find default device!\n");
     return;
