@@ -1,0 +1,3 @@
+IF (APPLE)
+  ADD_SUBDIRECTORY(osx)
+ENDIF()
