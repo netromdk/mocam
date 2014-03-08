@@ -23,7 +23,7 @@ namespace mocam {
     // TODO: get from ObjC.
     std::vector<ImplVDPtr > res;
     res.push_back(ImplVDPtr(new VideoDeviceImpl("LDKFJ", "First")));
-    res.push_back(ImplVDPtr(new VideoDeviceImpl(")lsd#", "Second")));
+    res.push_back(ImplVDPtr(new VideoDeviceImpl("dang", "dude")));
     res.push_back(ImplVDPtr(new VideoDeviceImpl("939fF", "Third")));
     return res;
   }

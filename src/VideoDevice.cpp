@@ -27,7 +27,6 @@ namespace mocam {
     return devs;
   }
 
-
   std::string VideoDevice::getUniqueId() const {
     return impl->getUniqueId();
   }
@@ -38,5 +37,10 @@ namespace mocam {
 
   std::string VideoDevice::toString() const {
     return impl->toString();
+  }
+
+  bool operator==(VDPtr first, VDPtr second) {
+    return first->getUniqueId() == second->getUniqueId() &&
+      first->getName() == second->getName();
   }
 }

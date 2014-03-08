@@ -29,6 +29,8 @@ namespace mocam {
 
     ImplVDPtr impl;
   };
+
+  bool operator==(VDPtr first, VDPtr second);
 }
 
 #endif // MOCAM_VIDEO_DEVICE_H
