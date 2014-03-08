@@ -118,6 +118,7 @@ void confAndLockDevice(AVCaptureDevice *device) {
   [session startRunning];
 
   // Capture a still image.
+  __block int gotStill = 0;
   AVCaptureConnection *conn = [outputDevice connectionWithMediaType:AVMediaTypeVideo];
   [outputDevice captureStillImageAsynchronouslyFromConnection:conn
     completionHandler:^(CMSampleBufferRef buffer, NSError *error) {
@@ -127,15 +128,15 @@ void confAndLockDevice(AVCaptureDevice *device) {
         [imageData writeToFile:filename atomically:NO];
       }
       else {
-        printf("failed\n");
+        printf("Failed to capture still!\n");
       }
+      gotStill = 1;
     }];
 
-  printf("Waiting 10 seconds..\n");
-  NSDate *now = [[NSDate alloc] init];
-  [[NSRunLoop currentRunLoop] runUntilDate:[now dateByAddingTimeInterval:[[NSNumber numberWithFloat:10] doubleValue]]];
-  [now release];
-  
+  while (gotStill == 0) {
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow: 0.1]];
+  }
+
   printf("Stop recording...\n");
   [session stopRunning];
   
