@@ -1,5 +1,11 @@
 #import "Snapper.h"
 
+@interface Snapper ()
+
+-(void)cleanup;
+
+@end
+
 @implementation Snapper
 
 - (id)init {

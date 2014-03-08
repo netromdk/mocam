@@ -9,10 +9,10 @@
 
 -(id)init;
 -(void)dealloc;
--(void)cleanup; // TODO: make private!
 
 -(BOOL)saveFrom:(AVCaptureDevice*)device toFile:(NSString*)filename;
 
 +(AVCaptureDevice*)getDefaultDevice;
 +(NSArray*)getDevices;
+
 @end
