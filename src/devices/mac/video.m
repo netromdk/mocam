@@ -26,7 +26,8 @@ void confAndLockDevice(AVCaptureDevice *device) {
   AVFrameRateRange *bestFrameRateRange = nil;
   for (AVCaptureDeviceFormat *format in [device formats]) {
     for (AVFrameRateRange *range in format.videoSupportedFrameRateRanges) {
-      if (range.maxFrameRate > bestFrameRateRange.maxFrameRate) {
+      if (!bestFrameRateRange ||
+          range.maxFrameRate > bestFrameRateRange.maxFrameRate) {
         bestFormat = format;
         bestFrameRateRange = range;
       }
