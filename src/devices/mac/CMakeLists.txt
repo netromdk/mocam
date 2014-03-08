@@ -1,4 +1,4 @@
-SET(SNAP mac_snapshot)
+SET(SNAP snapshot)
 
 ADD_EXECUTABLE(
   ${SNAP}
