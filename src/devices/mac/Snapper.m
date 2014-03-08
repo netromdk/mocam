@@ -9,11 +9,11 @@
 @implementation Snapper
 
 - (id)init {
-	self = [super init];
+  self = [super init];
   session = [[AVCaptureSession alloc] init];
   inputDevice = nil;
   outputDevice = nil;
-	return self;
+  return self;
 }
 
 - (void)dealloc {
