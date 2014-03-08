@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
   cout << "Supported video devices:" << endl;
   dumpDevices();
 
-  cout << endl << "Default device: ";
-  dumpDefaultDevice();
+  cout << endl;
+  getSnapshot();
   return 0;
 }
