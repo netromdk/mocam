@@ -3,16 +3,12 @@
 namespace mocam {
   VideoDeviceImpl::VideoDeviceImpl(const std::string &uniqueId)
     : uniqueId(uniqueId)
-  {
-    
-  }
+  { }
 
   VideoDeviceImpl::VideoDeviceImpl(const std::string &uniqueId,
                                    const std::string &name)
     : uniqueId(uniqueId), name(name)
-  {
-    
-  }
+  { }
   
   ImplVDPtr VideoDeviceImpl::getDefaultDevice() {
     // TODO: get default from ObjC.
