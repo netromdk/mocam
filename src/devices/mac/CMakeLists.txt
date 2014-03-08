@@ -6,6 +6,8 @@ ADD_EXECUTABLE(
 
   video.m
   video.h
+
+  Snapper.m
   )
 
 TARGET_LINK_LIBRARIES(${SNAP} ${MAC_LIBS})
