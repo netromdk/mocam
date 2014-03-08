@@ -16,7 +16,6 @@ void dumpDevice(AVCaptureDevice *device) {
 }
 
 void dumpDevices() {
-  // Get all available devices.
   for (AVCaptureDevice *device in [Snapper getDevices]) {
     dumpDevice(device);
   }
@@ -39,7 +38,7 @@ void confAndLockDevice(AVCaptureDevice *device) {
       printf("Conf and lock device.\n");
       device.activeFormat = bestFormat;
       device.activeVideoMinFrameDuration = bestFrameRateRange.minFrameDuration;
-      device.activeVideoMaxFrameDuration = bestFrameRateRange.minFrameDuration;
+      device.activeVideoMaxFrameDuration = bestFrameRateRange.maxFrameDuration;
       [device unlockForConfiguration];
     }
   }
