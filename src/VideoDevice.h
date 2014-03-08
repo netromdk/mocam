@@ -8,13 +8,16 @@
 #include "VideoDeviceImpl.h"
 
 namespace mocam {
+  class VideoDevice;
+  typedef std::shared_ptr<VideoDevice> VDPtr;
+
   class VideoDevice {
   public:
     VideoDevice(const std::string &uniqueId);
     VideoDevice(const std::string &uniqueId, const std::string &name);
 
-    static std::shared_ptr<VideoDevice> getDefaultDevice();
-    static std::vector<std::shared_ptr<VideoDevice> > getSystemDevices();
+    static VDPtr getDefaultDevice();
+    static std::vector<VDPtr> getSystemDevices();
     
     std::string getUniqueId() const;
     std::string getName() const;
@@ -22,9 +25,9 @@ namespace mocam {
     std::string toString() const;
 
   private:
-    VideoDevice(std::shared_ptr<VideoDeviceImpl> ptr);
+    VideoDevice(ImplVDPtr ptr);
 
-    std::shared_ptr<VideoDeviceImpl> impl;
+    ImplVDPtr impl;
   };
 }
 

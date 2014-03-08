@@ -1,9 +1,6 @@
 #include "VideoDevice.h"
 
 namespace mocam {
-  class VideoDevice;
-  typedef std::shared_ptr<VideoDevice> VDPtr;  
-  
   VideoDevice::VideoDevice(const std::string &uniqueId) {
     impl = ImplVDPtr(new VideoDeviceImpl(uniqueId));
   }
