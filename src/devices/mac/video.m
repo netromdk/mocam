@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
-#include "isight.h"
+#include "video.h"
 
 void dumpDevices() {
   printf("Supported devices:\n");

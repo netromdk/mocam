@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "isight.h"
+#include "video.h"
 
 int main(int argc, char **argv) {
   dumpDevices();
