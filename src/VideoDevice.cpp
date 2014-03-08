@@ -7,8 +7,7 @@ namespace mocam {
   
   VideoDevice::VideoDevice(const std::string &uniqueId,
                            const std::string &name) {
-    auto obj = new VideoDeviceImpl(uniqueId, name);
-    impl = ImplVDPtr(obj);
+    impl = ImplVDPtr(new VideoDeviceImpl(uniqueId, name));
   }
 
   VideoDevice::VideoDevice(ImplVDPtr ptr) {
@@ -16,8 +15,7 @@ namespace mocam {
   }
 
   VDPtr VideoDevice::getDefaultDevice() {
-    auto uptr = VideoDeviceImpl::getDefaultDevice();
-    return VDPtr(new VideoDevice(uptr));
+    return VDPtr(new VideoDevice(VideoDeviceImpl::getDefaultDevice()));
   }
 
   std::vector<VDPtr> VideoDevice::getSystemDevices() {
