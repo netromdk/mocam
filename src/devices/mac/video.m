@@ -3,14 +3,22 @@
 
 #include "video.h"
 
-void dumpDevices() {
-  printf("Supported devices:\n");
+void dumpDevice(AVCaptureDevice *device) {
+  printf("%s (%s)\n",
+         [[device localizedName] UTF8String],
+         [[device uniqueID] UTF8String]);
+}
 
+void dumpDevices() {
   // Get all available devices.
   for (AVCaptureDevice *device in
          [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo]) {
-    printf("%s (%s)\n",
-           [[device localizedName] UTF8String],
-           [[device uniqueID] UTF8String]);
+    dumpDevice(device);
   }
+}
+
+void dumpDefaultDevice() {
+  AVCaptureDevice *device =
+    [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+  dumpDevice(device);
 }
