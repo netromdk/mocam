@@ -87,8 +87,8 @@ int main(int argc, char **argv) {
 
   VDPtr device = nullptr;
   if (args->device.empty()) {
-    cout << "Using default device." << endl;
     device = VideoDevice::getDefaultDevice();
+    cout << "Using default device: " << device->getName() << endl;
   }
   else {
     auto devs = VideoDevice::getSystemDevices();
