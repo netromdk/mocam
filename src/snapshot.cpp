@@ -1,10 +1,13 @@
 #include <iostream>
 using namespace std;
 
+#include "Application.h"
 #include "VideoDevice.h"
 using namespace mocam;
 
 int main(int argc, char **argv) {
+  Application app;
+
   auto defDev = VideoDevice::getDefaultDevice();
   cout << "Default device: " << defDev->toString() << endl << endl;
 

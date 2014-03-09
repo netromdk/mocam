@@ -1,5 +1,6 @@
-#include "Util.h"
 #include "VideoDeviceImpl.h"
+
+#include "../Application.h"
 
 namespace mocam {
   VideoDeviceImpl::VideoDeviceImpl(const std::string &uniqueId)
@@ -12,17 +13,8 @@ namespace mocam {
   { }
   
   ImplVDPtr VideoDeviceImpl::getDefaultDevice() {
-    VideoDeviceImpl *dev = NULL;
-    char **id = new char*[1], **name = new char*[1];
-    if (!_getDefaultDevice(id, name)) {
-      dev = new VideoDeviceImpl; // Null ctor.
-    }
-    else {
-      dev = new VideoDeviceImpl(std::string(*id), std::string(*name));
-    }
-    delete[] id;
-    delete[] name;
-    return ImplVDPtr(dev);
+    auto p = Application::app()->getDefaultDevice();
+    return ImplVDPtr(new VideoDeviceImpl(p.first, p.second));
   }
 
   std::vector<ImplVDPtr> VideoDeviceImpl::getSystemDevices() {

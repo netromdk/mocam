@@ -11,6 +11,9 @@ IF (APPLE)
     mac/Util.h
     mac/Util.m
 
+    mac/ApplicationImpl.h
+    mac/ApplicationImpl.cpp
+
     mac/VideoDeviceImpl.h
     mac/VideoDeviceImpl.cpp
     )
@@ -21,6 +24,9 @@ SET(NAME snapshot)
 ADD_EXECUTABLE(
   ${NAME}
   ${NAME}.cpp
+
+  Application.h
+  Application.cpp
 
   VideoDevice.h
   VideoDevice.cpp
