@@ -17,7 +17,7 @@ namespace mocam {
 
   std::vector<ImplVDPtr> VideoDeviceImpl::getSystemDevices() {
     // TODO: get from ObjC.
-    std::vector<ImplVDPtr > res;
+    std::vector<ImplVDPtr> res;
     res.push_back(ImplVDPtr(new VideoDeviceImpl("LDKFJ", "First")));
     res.push_back(ImplVDPtr(new VideoDeviceImpl("dang", "dude")));
     res.push_back(ImplVDPtr(new VideoDeviceImpl("939fF", "Third")));
