@@ -22,3 +22,15 @@ bool _getDefaultDevice(char **id, char **name) {
   [dev release];
   return true;
 }
+
+int _getNumSystemDevices() {
+  NSArray *devs = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+  int count = [devs count];
+  [devs release];
+  return count;
+}
+
+/*
+void _getSystemDevices(char **IDs, char**names) {
+}
+*/

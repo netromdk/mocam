@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "Util.h"
 #include "VideoDeviceImpl.h"
 
