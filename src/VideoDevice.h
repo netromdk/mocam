@@ -21,8 +21,9 @@ namespace mocam {
     
     std::string getUniqueId() const;
     std::string getName() const;
-
     std::string toString() const;
+
+    bool isNull() const;
 
   private:
     VideoDevice(ImplVDPtr ptr);

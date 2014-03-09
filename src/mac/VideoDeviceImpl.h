@@ -19,10 +19,12 @@ namespace mocam {
 
     std::string getUniqueId() const { return uniqueId; }    
     std::string getName() const { return name; }
-
     std::string toString() const;
     
   private:
+    // Null ctor.
+    VideoDeviceImpl() { }
+
     std::string uniqueId, name;
   };
 }

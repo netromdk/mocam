@@ -6,6 +6,7 @@ using namespace mocam;
 
 int main(int argc, char **argv) {
   auto defDev = VideoDevice::getDefaultDevice();
+  cout << "Default device: " << defDev->toString() << endl << endl;
 
   cout << "Devices available on the system: (* = default)" << endl;
   auto devs = VideoDevice::getSystemDevices();

@@ -1,3 +1,6 @@
+#include <iostream>
+
+#include "Mac.h"
 #include "VideoDeviceImpl.h"
 
 namespace mocam {
@@ -11,8 +14,17 @@ namespace mocam {
   { }
   
   ImplVDPtr VideoDeviceImpl::getDefaultDevice() {
-    // TODO: get default from ObjC.
-    return ImplVDPtr(new VideoDeviceImpl("dang", "dude"));
+    VideoDeviceImpl *dev = NULL;
+    char **id = new char*[1], **name = new char*[1];
+    if (!::getDefaultDevice(id, name)) {
+      dev = new VideoDeviceImpl; // Null ctor.
+    }
+    else {
+      dev = new VideoDeviceImpl(std::string(*id), std::string(*name));
+    }
+    delete[] id;
+    delete[] name;
+    return ImplVDPtr(dev);
   }
 
   std::vector<ImplVDPtr> VideoDeviceImpl::getSystemDevices() {
