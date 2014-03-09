@@ -2,6 +2,7 @@
 using namespace std;
 
 #include "VideoDevice.h"
+#include "CaptureSession.h"
 using namespace mocam;
 
 int main(int argc, char **argv) {
@@ -18,5 +19,7 @@ int main(int argc, char **argv) {
   }
 
   defDev->init();
+
+  CaptureSession session;
   return 0;
 }

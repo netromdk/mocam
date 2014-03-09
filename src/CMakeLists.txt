@@ -13,6 +13,9 @@ IF (APPLE)
 
     mac/VideoDeviceImpl.h
     mac/VideoDeviceImpl.cpp
+
+    mac/CaptureSessionImpl.h
+    mac/CaptureSessionImpl.cpp
     )
 ENDIF()
 
@@ -24,6 +27,9 @@ ADD_EXECUTABLE(
 
   VideoDevice.h
   VideoDevice.cpp
+
+  CaptureSession.h
+  CaptureSession.cpp
 
   ${MAC_SOURCE}
   )
