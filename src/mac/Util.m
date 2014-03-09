@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
-#import "Mac.h"
+#include "Util.h"
 
 void stringToCStr(NSString *str, char **cstr) {
   const char *tmp = [str UTF8String];
@@ -11,13 +11,14 @@ void stringToCStr(NSString *str, char **cstr) {
   *cstr[len] = '\0';  
 }
 
-bool getDefaultDevice(char **id, char **name) {
+bool _getDefaultDevice(char **id, char **name) {
   AVCaptureDevice *dev =
     [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
   if (!dev) return false;
 
   stringToCStr([dev uniqueID], id);
   stringToCStr([dev localizedName], name);  
-  
+
+  [dev release];
   return true;
 }

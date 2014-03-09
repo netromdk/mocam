@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "Mac.h"
+#include "Util.h"
 #include "VideoDeviceImpl.h"
 
 namespace mocam {
@@ -16,7 +16,7 @@ namespace mocam {
   ImplVDPtr VideoDeviceImpl::getDefaultDevice() {
     VideoDeviceImpl *dev = NULL;
     char **id = new char*[1], **name = new char*[1];
-    if (!::getDefaultDevice(id, name)) {
+    if (!_getDefaultDevice(id, name)) {
       dev = new VideoDeviceImpl; // Null ctor.
     }
     else {

@@ -8,8 +8,8 @@ IF (APPLE)
   SET(
     MAC_SOURCE
 
-    mac/Mac.h
-    mac/Mac.m
+    mac/Util.h
+    mac/Util.m
 
     mac/VideoDeviceImpl.h
     mac/VideoDeviceImpl.cpp
