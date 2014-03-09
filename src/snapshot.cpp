@@ -12,13 +12,14 @@ int main(int argc, char **argv) {
   cout << "Devices available on the system: (* = default)" << endl;
   auto devs = VideoDevice::getSystemDevices();
   for (auto it = devs.begin(); it != devs.end(); ++it) {
-    cout << "Device: " << (*it)->toString();
+    cout << "  " << (*it)->toString();
     if (*it == defDev) {
       cout << " *";
     }
     cout << endl;
   }
 
+  cout << "Using default device." << endl;
   defDev->init();
 
   CaptureSession session;

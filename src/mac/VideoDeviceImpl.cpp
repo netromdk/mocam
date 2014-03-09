@@ -52,11 +52,11 @@ namespace mocam {
   }
 
   std::string VideoDeviceImpl::toString() const {
-    std::string res = "{ ";
+    std::string res;
     if (!name.empty()) {
-      res += "name = " + name + ", ";
+      res += name + " ";
     }
-    return res + "id = " + uniqueId + " }";
+    return res + "[" + uniqueId + "]";
   }
 
   void VideoDeviceImpl::init() {
