@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 
+#include "Util.h"
 #include "VideoDevice.h"
 #include "CaptureSession.h"
 using namespace mocam;
@@ -28,10 +29,16 @@ int main(int argc, char **argv) {
   
   int len;
   const unsigned char *img = session.getSnapshot(len);
-  cout << " done!" << endl << len << " bytes" << endl;
+  cout << " done!" << " (" << len << " bytes)" << endl;
 
-  // TODO: save to disk
-
+  std::string filename("/tmp/test.jpg");
+  if (Util::writeFile(filename, (char*) img, len)) {
+    cout << "Saved to file: " << filename << endl;
+  }
+  else {
+    cout << "Could not save to file: " << filename << endl;
+  }
   delete[] img;
+
   return 0;
 }

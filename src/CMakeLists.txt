@@ -24,6 +24,9 @@ ADD_EXECUTABLE(
   ${NAME}
   ${NAME}.cpp
 
+  Util.h
+  Util.cpp
+
   VideoDevice.h
   VideoDevice.cpp
 
