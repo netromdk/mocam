@@ -1,5 +1,3 @@
-#include <iostream> // remove if not used
-
 #include "MacUtil.h"
 #include "VideoDeviceImpl.h"
 
@@ -15,7 +13,6 @@ namespace mocam {
 
   VideoDeviceImpl::~VideoDeviceImpl() {
     if (inited && handle) {
-      std::cout << "releasing video device handle" << std::endl;
       _releaseDeviceHandle(handle);
       handle = nullptr;
     }
@@ -64,10 +61,7 @@ namespace mocam {
 
   void VideoDeviceImpl::init() {
     if (inited) return;
-
     handle = _getDeviceHandle(uniqueId.c_str());
-    std::cout << "got device handle: " << handle << std::endl;
-
     inited = true;
   }
 }

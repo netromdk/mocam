@@ -1,5 +1,3 @@
-#include <iostream>//remove if not needed
-
 #include "MacUtil.h"
 #include "CaptureSessionImpl.h"
 
@@ -8,17 +6,13 @@ namespace mocam {
     : handleInput(nullptr), handleOutput(nullptr)
   {
     handleSession = _getSessionHandle();
-    std::cout << "got session handle: " << handleSession << std::endl;    
   }
 
   CaptureSessionImpl::~CaptureSessionImpl() {
-    std::cout << "session destructor" << std::endl;
     close();
 
     if (handleSession) {
-      std::cout << "stopping session (if running)" << std::endl;
       _stopSession(handleSession);
-      std::cout << "release session handle" << std::endl;      
       _releaseSessionHandle(handleSession);
       handleSession = nullptr;
     }
@@ -44,13 +38,11 @@ namespace mocam {
     _stopSession(handleSession);
     
     if (handleInput) {
-      std::cout << "release session input" << std::endl;
       _releaseSessionInput(handleInput, handleSession);
       handleInput = nullptr;
     }
     
     if (handleOutput) {
-      std::cout << "release session output" << std::endl;
       _releaseSessionOutput(handleOutput, handleSession);      
       handleOutput = nullptr;
     }    

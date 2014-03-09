@@ -54,9 +54,9 @@ void configureDevice(AVCaptureDevice *device) {
     }
   }
   if (bestFormat) {
-    printf("found format with highest frame rate\n");
+    //printf("found format with highest frame rate\n");
     if ([device lockForConfiguration:NULL] == YES) {
-      printf("configured device\n");
+      //printf("configured device\n");
       device.activeFormat = bestFormat;
       device.activeVideoMinFrameDuration = bestFrameRateRange.minFrameDuration;
       device.activeVideoMaxFrameDuration = bestFrameRateRange.maxFrameDuration;
@@ -114,7 +114,7 @@ void *_setupSessionInput(void *device, void *session) {
 
   NSError *error = nil;
   
-  printf("Adding input device to session.\n");  
+  //printf("Adding input device to session.\n");
   inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:dev error:&error];
   if (!inputDevice || ![ses canAddInput:inputDevice]) {
     printf("Could not get input device, or could not add to session.\n");
