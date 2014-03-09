@@ -60,6 +60,10 @@ void configureDevice(AVCaptureDevice *device) {
       device.activeFormat = bestFormat;
       device.activeVideoMinFrameDuration = bestFrameRateRange.minFrameDuration;
       device.activeVideoMaxFrameDuration = bestFrameRateRange.maxFrameDuration;
+      if ([device isFlashModeSupported:AVCaptureFlashModeAuto]) {
+        printf("Enabling auto flash mode.\n");
+        device.flashMode = AVCaptureFlashModeAuto;
+      }
       [device unlockForConfiguration];
     }
   }
