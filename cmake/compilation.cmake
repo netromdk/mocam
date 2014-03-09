@@ -4,6 +4,21 @@ SET(CMAKE_CXX_FLAGS_MINSIZEREL "-O4 -DNDEBUG")
 SET(CMAKE_CXX_FLAGS_RELEASE "-O4 -DNDEBUG")
 SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 
+# Some release optimization flags for GCC/Clang.
+IF (NOT WIN32)
+  # Clang/GCC
+  SET(REL_OPTS "-pipe -fvisibility=hidden -fvisibility-inlines-hidden -ffast-math -funroll-loops")
+
+  # GCC only
+  IF ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+    SET(REL_OPTS "${REL_OPTS} -fno-implement-inlines")
+  ENDIF()
+
+  SET(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} ${REL_OPTS}")
+  SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${REL_OPTS}")
+  SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${REL_OPTS}")
+ENDIF()
+
 # Note: If -ObjC++ is not used then -std=c++11 will not work when
 # mixing C++/ObjC on GCC/CLang.
 
