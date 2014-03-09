@@ -10,14 +10,16 @@ void stringToCStr(NSString *str, char **cstr) {
   memcpy(*cstr, tmp, len);
 }
 
+void getDevInfo(AVCaptureDevice *device, char **id, char **name) {
+  stringToCStr([device uniqueID], id);
+  stringToCStr([device localizedName], name);
+}
+
 bool _getDefaultDevice(char **id, char **name) {
   AVCaptureDevice *dev =
     [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
   if (!dev) return false;
-
-  stringToCStr([dev uniqueID], id);
-  stringToCStr([dev localizedName], name);  
-
+  getDevInfo(dev, id, name);
   [dev release];
   return true;
 }
@@ -33,8 +35,7 @@ void _getSystemDevices(char **IDs, char **names) {
   NSArray *devs = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
   for (int i = 0; i < [devs count]; i++) {
     AVCaptureDevice *dev = [devs objectAtIndex:i];
-    stringToCStr([dev uniqueID], IDs + i);
-    stringToCStr([dev localizedName], names + i);    
+    getDevInfo(dev, IDs + i, names + i);
     [dev release];
   }
   [devs release];  
