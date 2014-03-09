@@ -74,7 +74,7 @@ void *_getDeviceHandle(const char *id) {
   return (void*) dev;
 }
 
-void _releaseHandle(void *handle) {
+void _releaseDeviceHandle(void *handle) {
   if (!handle) return;
   AVCaptureDevice *dev = (AVCaptureDevice*) handle;
   [dev release];

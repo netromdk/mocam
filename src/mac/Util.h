@@ -8,7 +8,7 @@ int _getNumSystemDevices();
 void _getSystemDevices(char **IDs, char**names);
 
 void *_getDeviceHandle(const char *id);
-void _releaseHandle(void *handle);
+void _releaseDeviceHandle(void *handle);
 
 #ifdef __cplusplus
 }
