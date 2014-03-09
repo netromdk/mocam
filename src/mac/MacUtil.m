@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
-#include "Util.h"
+#include "MacUtil.h"
 
 void stringToCStr(NSString *str, char **cstr) {
   const char *tmp = [str UTF8String];

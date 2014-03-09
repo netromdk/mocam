@@ -31,5 +31,7 @@ int main(int argc, char **argv) {
   cout << " done!" << endl << len << " bytes" << endl;
 
   // TODO: save to disk
+
+  delete[] img;
   return 0;
 }

@@ -1,6 +1,6 @@
 #include <iostream>//remove if not needed
 
-#include "Util.h"
+#include "MacUtil.h"
 #include "CaptureSessionImpl.h"
 
 namespace mocam {

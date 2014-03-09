@@ -1,6 +1,6 @@
 #include <iostream> // remove if not used
 
-#include "Util.h"
+#include "MacUtil.h"
 #include "VideoDeviceImpl.h"
 
 namespace mocam {
