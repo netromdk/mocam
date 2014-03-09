@@ -28,8 +28,8 @@ int main(int argc, char **argv) {
   
   int len;
   const unsigned char *img = session.getSnapshot(len);
-  cout << " done!" << endl;
+  cout << " done!" << endl << len << " bytes" << endl;
 
-  cout << len << " bytes" << endl;
+  // TODO: save to disk
   return 0;
 }
