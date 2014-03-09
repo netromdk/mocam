@@ -13,19 +13,26 @@ namespace mocam {
   public:
     VideoDeviceImpl(const std::string &uniqueId);
     VideoDeviceImpl(const std::string &uniqueId, const std::string &name);
+    ~VideoDeviceImpl();
 
     static ImplVDPtr getDefaultDevice();
     static std::vector<ImplVDPtr> getSystemDevices();
 
-    std::string getUniqueId() const { return uniqueId; }    
+    std::string getUniqueId() const { return uniqueId; }
     std::string getName() const { return name; }
     std::string toString() const;
-    
+
+    bool isInit() const { return inited; }
+    void init();
+
   private:
     // Null ctor.
     VideoDeviceImpl() { }
 
     std::string uniqueId, name;
+    bool inited;
+
+    void *handle; // AVCaptureDevice*
   };
 }
 

@@ -25,6 +25,9 @@ namespace mocam {
 
     bool isNull() const;
 
+    bool isInit() const;
+    void init();
+
   private:
     VideoDevice(ImplVDPtr ptr);
 

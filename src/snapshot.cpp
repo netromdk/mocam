@@ -16,5 +16,7 @@ int main(int argc, char **argv) {
     }
     cout << endl;
   }
+
+  defDev->init();
   return 0;
 }

@@ -1,17 +1,25 @@
-#include <iostream>
+#include <iostream> // remove if not used
 
 #include "Util.h"
 #include "VideoDeviceImpl.h"
 
 namespace mocam {
   VideoDeviceImpl::VideoDeviceImpl(const std::string &uniqueId)
-    : uniqueId(uniqueId)
+    : uniqueId(uniqueId), inited(false), handle(nullptr)
   { }
 
   VideoDeviceImpl::VideoDeviceImpl(const std::string &uniqueId,
                                    const std::string &name)
-    : uniqueId(uniqueId), name(name)
+    : uniqueId(uniqueId), name(name), inited(false), handle(nullptr)
   { }
+
+  VideoDeviceImpl::~VideoDeviceImpl() {
+    if (inited && handle) {
+      std::cout << "releasing handle" << std::endl;
+      _releaseHandle(handle);
+      handle = nullptr;
+    }
+  }
   
   ImplVDPtr VideoDeviceImpl::getDefaultDevice() {
     VideoDeviceImpl *dev = nullptr;
@@ -52,5 +60,14 @@ namespace mocam {
       res += "name = " + name + ", ";
     }
     return res + "id = " + uniqueId + " }";
+  }
+
+  void VideoDeviceImpl::init() {
+    if (inited) return;
+
+    handle = _getDeviceHandle(uniqueId.c_str());
+    std::cout << "acquired device handle: " << handle << std::endl;
+
+    inited = true;
   }
 }

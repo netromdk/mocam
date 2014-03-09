@@ -40,3 +40,42 @@ void _getSystemDevices(char **IDs, char **names) {
   }
   [devs release];  
 }
+
+void configureDevice(AVCaptureDevice *device) {
+  AVCaptureDeviceFormat *bestFormat = nil;
+  AVFrameRateRange *bestFrameRateRange = nil;
+  for (AVCaptureDeviceFormat *format in [device formats]) {
+    for (AVFrameRateRange *range in format.videoSupportedFrameRateRanges) {
+      if (!bestFrameRateRange ||
+          range.maxFrameRate > bestFrameRateRange.maxFrameRate) {
+        bestFormat = format;
+        bestFrameRateRange = range;
+      }
+    }
+  }
+  if (bestFormat) {
+    printf("found format with highest frame rate\n");
+    if ([device lockForConfiguration:NULL] == YES) {
+      printf("configured device\n");
+      device.activeFormat = bestFormat;
+      device.activeVideoMinFrameDuration = bestFrameRateRange.minFrameDuration;
+      device.activeVideoMaxFrameDuration = bestFrameRateRange.maxFrameDuration;
+      [device unlockForConfiguration];
+    }
+  }
+}
+
+void *_getDeviceHandle(const char *id) {
+  NSString *uid = [[NSString alloc] initWithUTF8String:id];
+  AVCaptureDevice *dev = [AVCaptureDevice deviceWithUniqueID:uid];
+  [uid release];
+  if (!dev) return NULL;
+  configureDevice(dev);
+  return (void*) dev;
+}
+
+void _releaseHandle(void *handle) {
+  if (!handle) return;
+  AVCaptureDevice *dev = (AVCaptureDevice*) handle;
+  [dev release];
+}

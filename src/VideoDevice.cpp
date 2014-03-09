@@ -43,6 +43,14 @@ namespace mocam {
     return getUniqueId().empty() && getName().empty();
   }
 
+  bool VideoDevice::isInit() const {
+    return impl->isInit();
+  }
+
+  void VideoDevice::init() {
+    impl->init();
+  }
+
   bool operator==(VDPtr first, VDPtr second) {
     return first->getUniqueId() == second->getUniqueId() &&
       first->getName() == second->getName();
