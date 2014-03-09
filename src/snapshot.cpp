@@ -1,29 +1,117 @@
+#include <memory>
 #include <iostream>
-using namespace std;
 
 #include "Util.h"
 #include "VideoDevice.h"
 #include "CaptureSession.h"
 using namespace mocam;
 
-int main(int argc, char **argv) {
-  auto defDev = VideoDevice::getDefaultDevice();
+struct Arguments {
+  Arguments() : list(false) { }
 
-  cout << "Devices available on the system: (* = default)" << endl;
-  auto devs = VideoDevice::getSystemDevices();
-  for (auto it = devs.begin(); it != devs.end(); ++it) {
-    cout << "  " << (*it)->toString();
-    if (*it == defDev) {
-      cout << " *";
-    }
-    cout << endl;
+  std::string filename, device;
+  bool list;
+  // format
+};
+
+void usage(char **argv) {
+  using namespace std;
+  cout << "Usage: " << argv[0] << " (options) <output filename>" << endl
+       << "Options:" << endl
+    /*
+       << "  --format | -f <fmt>   Snapshot format: 'jpg' or 'png'. Default is 'jpg'."
+       << endl
+    */
+       << "  --device | -d <id>    The device to take a snapshot from."
+       << endl
+       << "  --list | -l           List all available video devices on the system."
+       << endl;
+}
+
+std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
+  if (argc < 2) {
+    return nullptr;
   }
 
-  cout << "Using default device." << endl;
-  defDev->init();
+  auto args = std::unique_ptr<Arguments>(new Arguments);
+
+  int lastOpt = 0;
+  for (int i = 1; i < argc; i++) {
+    std::string arg(argv[i]); // todo: to lower
+    if (arg.find("--device") == 0 || arg.find("-d") == 0) {
+      if (i >= argc - 1) {
+        std::cout << "Specify the device!" << std::endl;
+        return nullptr;
+      }
+
+      i++;
+      args->device = std::string(argv[i]);
+      if (i > lastOpt) lastOpt = i;
+    }
+    else if (arg.find("--list") == 0 || arg.find("-l") == 0) {
+      args->list = true;
+    }
+  }
+
+  // If last opt was after the filename then stop.
+  if (lastOpt == argc - 1) {
+    return nullptr;
+  }
+
+  args->filename = argv[argc - 1];
+  return args;
+}
+
+int main(int argc, char **argv) {
+  using namespace std;
+
+  auto args = parseArgs(argc, argv);
+  if (args == nullptr) {
+    usage(argv);
+    return -1;
+  }
+
+  if (args->list) {
+    auto defDev = VideoDevice::getDefaultDevice();
+    cout << "Devices available on the system: (* = default)" << endl;
+    auto devs = VideoDevice::getSystemDevices();
+    for (auto it = devs.begin(); it != devs.end(); ++it) {
+      cout << "  " << (*it)->toString();
+      if (*it == defDev) {
+        cout << " *";
+      }
+      cout << endl;
+    }
+    return 0;
+  }
+
+  VDPtr device = nullptr;
+  if (args->device.empty()) {
+    cout << "Using default device." << endl;
+    device = VideoDevice::getDefaultDevice();
+  }
+  else {
+    auto devs = VideoDevice::getSystemDevices();
+    for (auto it = devs.begin(); it != devs.end(); ++it) {
+      if ((*it)->getUniqueId() == args->device) {
+        device = *it;
+        break;
+      }
+    }
+    if (device == nullptr) {
+      cout << "Device not found: " << args->device << endl
+           << "Check list of available devices with the --list option." << endl;
+      return -1;
+    }
+    else {
+      cout << "Using device: " << device->getName() << endl;
+    }
+  }
+
+  device->init();
 
   CaptureSession session;
-  session.setDevice(defDev);
+  session.setDevice(device);
 
   cout << "Getting snapshot..";
   cout.flush();
@@ -32,12 +120,11 @@ int main(int argc, char **argv) {
   const unsigned char *img = session.getSnapshot(len);
   cout << " done!" << " (" << len << " bytes)" << endl;
 
-  std::string filename("/tmp/test.jpg");
-  if (Util::writeFile(filename, (char*) img, len)) {
-    cout << "Saved to file: " << filename << endl;
+  if (Util::writeFile(args->filename, (char*) img, len)) {
+    cout << "Saved to file: " << args->filename << endl;
   }
   else {
-    cout << "Could not save to file: " << filename << endl;
+    cout << "Could not save to file: " << args->filename << endl;
   }
   delete[] img;
 
