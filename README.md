@@ -4,8 +4,8 @@ mocam
 The intention of this project is to interact and stream frames from
 video devices and do facial analysis on them.
 
-General requirements
-====================
+Requirements
+============
 
 A C++11 compliant compiler (GCC 4.7+, Clang 3.2+ etc.) and CMake 2.8+.
 
