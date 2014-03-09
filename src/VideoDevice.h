@@ -28,6 +28,8 @@ namespace mocam {
     bool isInit() const;
     void init();
 
+    void *getHandle() const;
+
   private:
     VideoDevice(ImplVDPtr ptr);
 

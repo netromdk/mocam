@@ -25,6 +25,8 @@ namespace mocam {
     bool isInit() const { return inited; }
     void init();
 
+    void *getHandle() const { return handle; }
+
   private:
     // Null ctor.
     VideoDeviceImpl() { }

@@ -21,5 +21,15 @@ int main(int argc, char **argv) {
   defDev->init();
 
   CaptureSession session;
+  session.setDevice(defDev);
+
+  cout << "Getting snapshot..";
+  cout.flush();
+  
+  int len;
+  const unsigned char *img = session.getSnapshot(len);
+  cout << " done!" << endl;
+
+  cout << len << " bytes" << endl;
   return 0;
 }

@@ -51,6 +51,10 @@ namespace mocam {
     impl->init();
   }
 
+  void *VideoDevice::getHandle() const {
+    return impl->getHandle();
+  }
+
   bool operator==(VDPtr first, VDPtr second) {
     return first->getUniqueId() == second->getUniqueId() &&
       first->getName() == second->getName();

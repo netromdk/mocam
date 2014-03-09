@@ -15,7 +15,7 @@ namespace mocam {
 
   VideoDeviceImpl::~VideoDeviceImpl() {
     if (inited && handle) {
-      std::cout << "releasing handle" << std::endl;
+      std::cout << "releasing video device handle" << std::endl;
       _releaseDeviceHandle(handle);
       handle = nullptr;
     }
@@ -66,7 +66,7 @@ namespace mocam {
     if (inited) return;
 
     handle = _getDeviceHandle(uniqueId.c_str());
-    std::cout << "acquired device handle: " << handle << std::endl;
+    std::cout << "got device handle: " << handle << std::endl;
 
     inited = true;
   }

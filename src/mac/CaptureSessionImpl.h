@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include "../VideoDevice.h"
+
 namespace mocam {
   class CaptureSessionImpl;
   typedef std::shared_ptr<CaptureSessionImpl> ImplCSPtr;
@@ -12,8 +14,15 @@ namespace mocam {
     CaptureSessionImpl();
     ~CaptureSessionImpl();
 
+    void setDevice(VDPtr device);
+    const unsigned char *getSnapshot(int &len);
+    void close();    
+
   private:
-    void *handle; // AVCaptureSession*
+    void *handleSession, // AVCaptureSession*
+      *handleInput, // AVCaptureDeviceInput*
+      *handleOutput; // AVCaptureStillImageOutput* fx
+    VDPtr device;
   };
 }
 

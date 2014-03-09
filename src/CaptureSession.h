@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "VideoDevice.h"
 #include "CaptureSessionImpl.h"
 
 namespace mocam {
@@ -12,6 +13,10 @@ namespace mocam {
   class CaptureSession {
   public:
     CaptureSession();
+
+    void setDevice(VDPtr device);
+    const unsigned char *getSnapshot(int &len);
+    void close();
 
   private:
     ImplCSPtr impl;
