@@ -60,10 +60,22 @@ void configureDevice(AVCaptureDevice *device) {
       device.activeFormat = bestFormat;
       device.activeVideoMinFrameDuration = bestFrameRateRange.minFrameDuration;
       device.activeVideoMaxFrameDuration = bestFrameRateRange.maxFrameDuration;
+
+      if ([device isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+        printf("Enabling auto focus mode.\n");
+        device.focusMode = AVCaptureFocusModeAutoFocus;
+      }
+
       if ([device isFlashModeSupported:AVCaptureFlashModeAuto]) {
         printf("Enabling auto flash mode.\n");
         device.flashMode = AVCaptureFlashModeAuto;
       }
+
+      if ([device isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeAutoWhiteBalance]) {
+        printf("Enabling auto white balance mode.\n");
+        device.whiteBalanceMode = AVCaptureWhiteBalanceModeAutoWhiteBalance;
+      }
+
       [device unlockForConfiguration];
     }
   }
