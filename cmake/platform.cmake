@@ -3,3 +3,4 @@ IF (APPLE)
 ENDIF()
 
 INCLUDE(compilation)
+INCLUDE(deps)

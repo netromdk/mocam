@@ -7,7 +7,8 @@ video devices and do facial analysis on them.
 Requirements
 ============
 
-A C++11 compliant compiler (GCC 4.7+, Clang 3.2+ etc.) and CMake 2.8+.
+A C++11 compliant compiler (GCC 4.7+, Clang 3.2+ etc.), CMake 2.8+,
+and OpenCV library 2.4+.
 
 snapshot
 ========
