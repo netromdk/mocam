@@ -1,4 +1,4 @@
-SET(SDK_MIN "10.8")
+SET(SDK_MIN "10.9")
 SET(SDK "10.9")
 SET(DEV_SDK "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${SDK}.sdk")
 
