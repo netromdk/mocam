@@ -20,6 +20,7 @@ namespace mocam {
   QList<VDPtr> VideoDevice::getSystemDevices() {
     auto udevs = VideoDeviceImpl::getSystemDevices();
     QList<VDPtr> devs;
+    devs.reserve(udevs.size());
     foreach (const auto &dev, udevs) {
       devs << VDPtr(new VideoDevice(dev));
     }
