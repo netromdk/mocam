@@ -51,14 +51,6 @@ namespace mocam {
     return res;
   }
 
-  QString VideoDeviceImpl::toString() const {
-    QString res;
-    if (!name.isEmpty()) {
-      res += name + " ";
-    }
-    return res + "[" + uniqueId + "]";
-  }
-
   void VideoDeviceImpl::init() {
     if (inited) return;
     handle = _getDeviceHandle(uniqueId.toUtf8().constData());

@@ -21,7 +21,6 @@ namespace mocam {
 
     QString getUniqueId() const { return uniqueId; }
     QString getName() const { return name; }
-    QString toString() const;
 
     bool isInit() const { return inited; }
     void init();

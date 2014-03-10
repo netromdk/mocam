@@ -34,10 +34,6 @@ namespace mocam {
     return impl->getName();
   }
 
-  QString VideoDevice::toString() const {
-    return impl->toString();
-  }
-
   bool VideoDevice::isNull() const {
     return getUniqueId().isEmpty() && getName().isEmpty();
   }

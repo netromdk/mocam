@@ -23,7 +23,6 @@ namespace mocam {
     
     QString getUniqueId() const;
     QString getName() const;
-    QString toString() const;
 
     bool isNull() const;
 
