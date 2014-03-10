@@ -7,8 +7,8 @@ video devices and do facial analysis on them.
 Requirements
 ============
 
-A C++11 compliant compiler (GCC 4.7+, Clang 3.2+ etc.), CMake 2.8+,
-and OpenCV library 2.4+.
+A C++11 compliant compiler (GCC 4.7+, Clang 3.2+ etc.), CMake 2.8.8+,
+Qt 5.2+ and OpenCV library 2.4+.
 
 snapshot
 ========
@@ -26,7 +26,7 @@ Now you can run the program: ./bin/snapshot
 ```
 Usage: ./bin/snapshot (options) <output filename>
 Options:
-  --help | h            Shows this message.
+  --help | -h            Shows this message.
   --device | -d <id>    The device to take a snapshot from.
   --list | -l           List all available video devices on the system.
 ```

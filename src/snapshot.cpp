@@ -18,7 +18,7 @@ void usage(char **argv) {
   using namespace std;
   cout << "Usage: " << argv[0] << " (options) <output filename>" << endl
        << "Options:" << endl
-       << "  --help | h            Shows this message."
+       << "  --help | -h            Shows this message."
        << endl
     /*
        << "  --format | -f <fmt>   Snapshot format: 'jpg' or 'png'. Default is 'jpg'."
