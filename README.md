@@ -21,3 +21,11 @@ This utility is used to snap an image from a video device.
 5. make
 
 Now you can run the program: ./bin/snapshot
+
+```
+Usage: ./bin/snapshot (options) <output filename>
+Options:
+  --help | h            Shows this message.
+  --device | -d <id>    The device to take a snapshot from.
+  --list | -l           List all available video devices on the system.
+```
