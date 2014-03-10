@@ -128,6 +128,11 @@ int main(int argc, char **argv) {
   
   int len;
   const unsigned char *img = session.getSnapshot(len);
+  if (!img) {
+    cout << endl << "Failed to get snapshot." << endl;
+    return -1;
+  }
+
   cout << " done!" << " (" << len << " bytes)" << endl;
 
   if (Util::writeToFile(args->filename, (char*) img, len)) {
