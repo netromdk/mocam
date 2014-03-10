@@ -22,8 +22,9 @@ namespace mocam {
     if (!device->isInit()) {
       return false;
     }
-    _stopSession(handleSession);
     this->device = device;
+
+    _stopSession(handleSession);
     if (handleInput) {
       _releaseSessionInput(handleInput, handleSession);
     }
@@ -34,7 +35,12 @@ namespace mocam {
   const unsigned char *CaptureSessionImpl::getSnapshot(int &len) {
     const unsigned char *img = nullptr;
 
+    _stopSession(handleSession);
+    if (handleOutput) {
+      _releaseSessionOutput(handleOutput, handleSession);
+    }
     handleOutput = _setupSessionOutput(handleSession);
+
     _startSession(handleSession);
     img = _getSnapshot(handleOutput, len);
     _stopSession(handleSession);    
