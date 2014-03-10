@@ -1,6 +1,8 @@
+INCLUDE(compilation)
+
+SET(EXTRA_LIBS)
+INCLUDE(deps)
+
 IF (APPLE)
   INCLUDE(mac)
 ENDIF()
-
-INCLUDE(compilation)
-INCLUDE(deps)
