@@ -5,8 +5,8 @@ namespace mocam {
     impl = ImplCSPtr(new CaptureSessionImpl);
   }
 
-  void CaptureSession::setDevice(VDPtr device) {
-    impl->setDevice(device);
+  bool CaptureSession::setDevice(VDPtr device) {
+    return impl->setDevice(device);
   }
 
   const unsigned char *CaptureSession::getSnapshot(int &len) {

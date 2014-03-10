@@ -118,7 +118,10 @@ int main(int argc, char **argv) {
   device->init();
 
   CaptureSession session;
-  session.setDevice(device);
+  if (!session.setDevice(device)) {
+    cout << "Could not associate device with capture session." << endl;
+    return -1;
+  }
 
   cout << "Getting snapshot..";
   cout.flush();

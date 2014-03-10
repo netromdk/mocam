@@ -14,7 +14,7 @@ namespace mocam {
     CaptureSessionImpl();
     ~CaptureSessionImpl();
 
-    void setDevice(VDPtr device);
+    bool setDevice(VDPtr device);
     const unsigned char *getSnapshot(int &len);
     void close();    
 

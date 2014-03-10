@@ -18,9 +18,17 @@ namespace mocam {
     }
   }
 
-  void CaptureSessionImpl::setDevice(VDPtr device) {
+  bool CaptureSessionImpl::setDevice(VDPtr device) {
+    if (!device->isInit()) {
+      return false;
+    }
+    _stopSession(handleSession);
     this->device = device;
+    if (handleInput) {
+      _releaseSessionInput(handleInput, handleSession);
+    }
     handleInput = _setupSessionInput(this->device->getHandle(), handleSession);
+    return true;
   }
 
   const unsigned char *CaptureSessionImpl::getSnapshot(int &len) {
