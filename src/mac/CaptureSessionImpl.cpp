@@ -22,12 +22,12 @@ namespace mocam {
     if (!device->isInit()) {
       return false;
     }
-    this->device = device;
 
-    _stopSession(handleSession);
-    if (handleInput) {
-      _releaseSessionInput(handleInput, handleSession);
-    }
+    // Close and cleanup everything at this point because we are
+    // setting/changing device.
+    close();
+
+    this->device = device;
     handleInput = _setupSessionInput(this->device->getHandle(), handleSession);
     return true;
   }
@@ -35,11 +35,11 @@ namespace mocam {
   const unsigned char *CaptureSessionImpl::getSnapshot(int &len) {
     const unsigned char *img = nullptr;
 
-    _stopSession(handleSession);
-    if (handleOutput) {
-      _releaseSessionOutput(handleOutput, handleSession);
+    // Create the device the first time it's needed and reuse it as
+    // long as possible.
+    if (!handleOutput) {
+      handleOutput = _setupSessionOutput(handleSession);
     }
-    handleOutput = _setupSessionOutput(handleSession);
 
     _startSession(handleSession);
     img = _getSnapshot(handleOutput, len);
