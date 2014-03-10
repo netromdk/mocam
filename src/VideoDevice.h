@@ -1,7 +1,9 @@
 #ifndef MOCAM_VIDEO_DEVICE_H
 #define MOCAM_VIDEO_DEVICE_H
 
-#include <string>
+#include <QDebug>
+#include <QString>
+
 #include <vector>
 #include <memory>
 
@@ -13,15 +15,15 @@ namespace mocam {
 
   class VideoDevice {
   public:
-    VideoDevice(const std::string &uniqueId);
-    VideoDevice(const std::string &uniqueId, const std::string &name);
+    VideoDevice(const QString &uniqueId);
+    VideoDevice(const QString &uniqueId, const QString &name);
 
     static VDPtr getDefaultDevice();
     static std::vector<VDPtr> getSystemDevices();
     
-    std::string getUniqueId() const;
-    std::string getName() const;
-    std::string toString() const;
+    QString getUniqueId() const;
+    QString getName() const;
+    QString toString() const;
 
     bool isNull() const;
 
@@ -37,6 +39,7 @@ namespace mocam {
   };
 
   bool operator==(VDPtr first, VDPtr second);
+  QDebug operator<<(QDebug dbg, VDPtr device);
 }
 
 #endif // MOCAM_VIDEO_DEVICE_H

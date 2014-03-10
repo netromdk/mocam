@@ -1,12 +1,11 @@
 #include "VideoDevice.h"
 
 namespace mocam {
-  VideoDevice::VideoDevice(const std::string &uniqueId) {
+  VideoDevice::VideoDevice(const QString &uniqueId) {
     impl = ImplVDPtr(new VideoDeviceImpl(uniqueId));
   }
   
-  VideoDevice::VideoDevice(const std::string &uniqueId,
-                           const std::string &name) {
+  VideoDevice::VideoDevice(const QString &uniqueId, const QString &name) {
     impl = ImplVDPtr(new VideoDeviceImpl(uniqueId, name));
   }
 
@@ -27,20 +26,20 @@ namespace mocam {
     return devs;
   }
 
-  std::string VideoDevice::getUniqueId() const {
+  QString VideoDevice::getUniqueId() const {
     return impl->getUniqueId();
   }
   
-  std::string VideoDevice::getName() const {
+  QString VideoDevice::getName() const {
     return impl->getName();
   }
 
-  std::string VideoDevice::toString() const {
+  QString VideoDevice::toString() const {
     return impl->toString();
   }
 
   bool VideoDevice::isNull() const {
-    return getUniqueId().empty() && getName().empty();
+    return getUniqueId().isEmpty() && getName().isEmpty();
   }
 
   bool VideoDevice::isInit() const {
@@ -58,5 +57,12 @@ namespace mocam {
   bool operator==(VDPtr first, VDPtr second) {
     return first->getUniqueId() == second->getUniqueId() &&
       first->getName() == second->getName();
+  }
+
+  QDebug operator<<(QDebug dbg, VDPtr device) {
+    dbg << qPrintable(QString("{ name = %1, id = %2 }")
+                      .arg(device->getName())
+                      .arg(device->getUniqueId()));
+    return dbg;
   }
 }

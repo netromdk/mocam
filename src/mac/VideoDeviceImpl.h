@@ -1,7 +1,8 @@
 #ifndef MOCAM_VIDEO_DEVICE_IMPL_H
 #define MOCAM_VIDEO_DEVICE_IMPL_H
 
-#include <string>
+#include <QString>
+
 #include <vector>
 #include <memory>
 
@@ -11,16 +12,16 @@ namespace mocam {
   
   class VideoDeviceImpl {
   public:
-    VideoDeviceImpl(const std::string &uniqueId);
-    VideoDeviceImpl(const std::string &uniqueId, const std::string &name);
+    VideoDeviceImpl(const QString &uniqueId);
+    VideoDeviceImpl(const QString &uniqueId, const QString &name);
     ~VideoDeviceImpl();
 
     static ImplVDPtr getDefaultDevice();
     static std::vector<ImplVDPtr> getSystemDevices();
 
-    std::string getUniqueId() const { return uniqueId; }
-    std::string getName() const { return name; }
-    std::string toString() const;
+    QString getUniqueId() const { return uniqueId; }
+    QString getName() const { return name; }
+    QString toString() const;
 
     bool isInit() const { return inited; }
     void init();
@@ -31,7 +32,7 @@ namespace mocam {
     // Null ctor.
     VideoDeviceImpl() { }
 
-    std::string uniqueId, name;
+    QString uniqueId, name;
     bool inited;
 
     void *handle; // AVCaptureDevice*

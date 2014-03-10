@@ -1,3 +1,7 @@
+#include <QDebug>
+#include <QString>
+#include <QCoreApplication>
+
 #include <memory>
 #include <iostream>
 
@@ -9,25 +13,23 @@ using namespace mocam;
 struct Arguments {
   Arguments() : list(false) { }
 
-  std::string filename, device;
+  QString filename, device;
   bool list;
   // format
 };
 
 void usage(char **argv) {
-  using namespace std;
-  cout << "Usage: " << argv[0] << " (options) <output filename>" << endl
-       << "Options:" << endl
-       << "  --help | -h            Shows this message."
-       << endl
+  qDebug() << "Usage: " << argv[0] << " (options) <output filename>" << endl
+           << "Options:" << endl
+           << "  --help | -h            Shows this message."
+           << endl
     /*
-       << "  --format | -f <fmt>   Snapshot format: 'jpg' or 'png'. Default is 'jpg'."
-       << endl
+      << "  --format | -f <fmt>   Snapshot format: 'jpg' or 'png'. Default is 'jpg'."
+      << endl
     */
-       << "  --device | -d <id>    The device to take a snapshot from."
-       << endl
-       << "  --list | -l           List all available video devices on the system."
-       << endl;
+           << "  --device | -d <id>    The device to take a snapshot from."
+           << endl
+           << "  --list | -l           List all available video devices on the system.";
 }
 
 std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
@@ -39,23 +41,22 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
 
   int lastOpt = 0;
   for (int i = 1; i < argc; i++) {
-    std::string arg(argv[i]);
-    Util::toLower(arg);
-    if (arg.find("--help") == 0 || arg.find("-h") == 0) {
+    QString arg = QString::fromUtf8(argv[i]).trimmed().toLower();
+    if (arg.startsWith("--help") || arg.startsWith("-h")) {
       usage(argv);
       exit(0);
     }
-    else if (arg.find("--device") == 0 || arg.find("-d") == 0) {
+    else if (arg.startsWith("--device") || arg.startsWith("-d")) {
       if (i >= argc - 1) {
-        std::cout << "Specify the device!" << std::endl;
+        qCritical() << "Specify the device!";
         return nullptr;
       }
 
       i++;
-      args->device = std::string(argv[i]);
+      args->device = QString::fromUtf8(argv[i]);
       if (i > lastOpt) lastOpt = i;
     }
-    else if (arg.find("--list") == 0 || arg.find("-l") == 0) {
+    else if (arg.startsWith("--list") || arg.startsWith("-l")) {
       args->list = true;
     }
   }
@@ -65,12 +66,12 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
     return nullptr;
   }
 
-  args->filename = argv[argc - 1];
+  args->filename = QString::fromUtf8(argv[argc - 1]);
   return args;
 }
 
 int main(int argc, char **argv) {
-  using namespace std;
+  QCoreApplication app(argc, argv);
 
   auto args = parseArgs(argc, argv);
   if (args == nullptr) {
@@ -80,22 +81,18 @@ int main(int argc, char **argv) {
 
   if (args->list) {
     auto defDev = VideoDevice::getDefaultDevice();
-    cout << "Devices available on the system: (* = default)" << endl;
+    qDebug() << "Devices available on the system: (* = default)";
     auto devs = VideoDevice::getSystemDevices();
     for (auto it = devs.begin(); it != devs.end(); ++it) {
-      cout << "  " << (*it)->toString();
-      if (*it == defDev) {
-        cout << " *";
-      }
-      cout << endl;
+      qDebug() << "  " << (*it) << (*it == defDev ? "*" : "");
     }
     return 0;
   }
 
   VDPtr device = nullptr;
-  if (args->device.empty()) {
+  if (args->device.isEmpty()) {
     device = VideoDevice::getDefaultDevice();
-    cout << "Using default device: " << device->getName() << endl;
+    qDebug() << "Using default device:" << device->getName();
   }
   else {
     auto devs = VideoDevice::getSystemDevices();
@@ -106,12 +103,12 @@ int main(int argc, char **argv) {
       }
     }
     if (device == nullptr) {
-      cout << "Device not found: " << args->device << endl
-           << "Check list of available devices with the --list option." << endl;
+      qCritical() << "Device not found:" << args->device << endl
+                  << "Check list of available devices with the --list option.";
       return -1;
     }
     else {
-      cout << "Using device: " << device->getName() << endl;
+      qDebug() << "Using device:" << device->getName();
     }
   }
 
@@ -119,27 +116,28 @@ int main(int argc, char **argv) {
 
   CaptureSession session;
   if (!session.setDevice(device)) {
-    cout << "Could not associate device with capture session." << endl;
+    qCritical() << "Could not associate device with capture session.";
     return -1;
   }
 
-  cout << "Getting snapshot..";
-  cout.flush();
+  std::cout << "Getting snapshot..";
+  std::cout.flush();
   
   int len;
   const unsigned char *img = session.getSnapshot(len);
   if (!img) {
-    cout << endl << "Failed to get snapshot." << endl;
+    qCritical() << endl << "Failed to get snapshot.";
     return -1;
   }
 
-  cout << " done!" << " (" << len << " bytes)" << endl;
+  std::cout << " done!" << " (" << len << " bytes)" << std::endl;
 
-  if (Util::writeToFile(args->filename, (char*) img, len)) {
-    cout << "Saved to file: " << args->filename << endl;
+  if (Util::writeToFile(args->filename.toUtf8().constData(),
+                        (char*) img, len)) {
+    qDebug() << "Saved to file:" << args->filename;
   }
   else {
-    cout << "Could not save to file: " << args->filename << endl;
+    qDebug() << "Could not save to file:" << args->filename;
   }
   delete[] img;
 
