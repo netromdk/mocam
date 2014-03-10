@@ -37,7 +37,8 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
 
   int lastOpt = 0;
   for (int i = 1; i < argc; i++) {
-    std::string arg(argv[i]); // todo: to lower
+    std::string arg(argv[i]);
+    Util::toLower(arg);
     if (arg.find("--device") == 0 || arg.find("-d") == 0) {
       if (i >= argc - 1) {
         std::cout << "Specify the device!" << std::endl;

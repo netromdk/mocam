@@ -1,8 +1,13 @@
 #include <fstream>
+#include <algorithm>
 
 #include "Util.h"
 
 namespace mocam {
+  void Util::toLower(std::string &data) {
+    std::transform(data.begin(), data.end(), data.begin(), ::tolower);
+  }
+
   bool Util::writeFile(const std::string &filename, const char *data,
                        int length) {
     std::ofstream file;
