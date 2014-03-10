@@ -1,6 +1,8 @@
 #ifndef MOCAM_CAPTURE_SESSION_H
 #define MOCAM_CAPTURE_SESSION_H
 
+#include <QImage>
+
 #include <memory>
 
 #include "VideoDevice.h"
@@ -15,7 +17,7 @@ namespace mocam {
     CaptureSession();
 
     bool setDevice(VDPtr device);
-    const unsigned char *getSnapshot(int &len);
+    QImage getSnapshot();
     void close();
 
   private:

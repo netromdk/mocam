@@ -32,18 +32,22 @@ namespace mocam {
     return true;
   }
 
-  const unsigned char *CaptureSessionImpl::getSnapshot(int &len) {
-    const unsigned char *img = nullptr;
-
+  QImage CaptureSessionImpl::getSnapshot() {
     // Create the device the first time it's needed and reuse it as
     // long as possible.
     if (!handleOutput) {
       handleOutput = _setupSessionOutput(handleSession);
     }
 
+    int len;
     _startSession(handleSession);
-    img = _getSnapshot(handleOutput, len);
-    _stopSession(handleSession);    
+    const unsigned char *imgData = _getSnapshot(handleOutput, len);
+    _stopSession(handleSession);
+
+    if (!imgData) return QImage();
+
+    QImage img = QImage::fromData(imgData, len);
+    delete[] imgData;
     
     return img;
   }

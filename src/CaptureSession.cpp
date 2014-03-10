@@ -9,8 +9,8 @@ namespace mocam {
     return impl->setDevice(device);
   }
 
-  const unsigned char *CaptureSession::getSnapshot(int &len) {
-    return impl->getSnapshot(len);
+  QImage CaptureSession::getSnapshot() {
+    return impl->getSnapshot();
   }
 
   void CaptureSession::close() {

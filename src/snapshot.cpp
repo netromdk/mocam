@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QImage>
 #include <QString>
 #include <QCoreApplication>
 
@@ -121,23 +122,20 @@ int main(int argc, char **argv) {
   std::cout << "Getting snapshot..";
   std::cout.flush();
   
-  int len;
-  const unsigned char *img = session.getSnapshot(len);
-  if (!img) {
+  QImage img = session.getSnapshot();
+  if (img.isNull()) {
     qCritical() << endl << "Failed to get snapshot.";
     return -1;
   }
 
-  std::cout << " done!" << " (" << len << " bytes)" << std::endl;
+  std::cout << " done!" << std::endl;
 
-  if (Util::writeToFile(args->filename.toUtf8().constData(),
-                        (char*) img, len)) {
+  if (img.save(args->filename)) {
     qDebug() << "Saved to file:" << args->filename;
   }
   else {
     qDebug() << "Could not save to file:" << args->filename;
   }
-  delete[] img;
 
   return 0;
 }
