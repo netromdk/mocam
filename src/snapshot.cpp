@@ -18,6 +18,8 @@ void usage(char **argv) {
   using namespace std;
   cout << "Usage: " << argv[0] << " (options) <output filename>" << endl
        << "Options:" << endl
+       << "  --help | h            Shows this message."
+       << endl
     /*
        << "  --format | -f <fmt>   Snapshot format: 'jpg' or 'png'. Default is 'jpg'."
        << endl
@@ -39,7 +41,11 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
   for (int i = 1; i < argc; i++) {
     std::string arg(argv[i]);
     Util::toLower(arg);
-    if (arg.find("--device") == 0 || arg.find("-d") == 0) {
+    if (arg.find("--help") == 0 || arg.find("-h") == 0) {
+      usage(argv);
+      exit(0);
+    }
+    else if (arg.find("--device") == 0 || arg.find("-d") == 0) {
       if (i >= argc - 1) {
         std::cout << "Specify the device!" << std::endl;
         return nullptr;
