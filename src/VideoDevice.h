@@ -1,10 +1,10 @@
 #ifndef MOCAM_VIDEO_DEVICE_H
 #define MOCAM_VIDEO_DEVICE_H
 
+#include <QList>
 #include <QDebug>
 #include <QString>
 
-#include <vector>
 #include <memory>
 
 #include "VideoDeviceImpl.h"
@@ -19,7 +19,7 @@ namespace mocam {
     VideoDevice(const QString &uniqueId, const QString &name);
 
     static VDPtr getDefaultDevice();
-    static std::vector<VDPtr> getSystemDevices();
+    static QList<VDPtr> getSystemDevices();
     
     QString getUniqueId() const;
     QString getName() const;

@@ -33,15 +33,15 @@ namespace mocam {
     return ImplVDPtr(dev);
   }
 
-  std::vector<ImplVDPtr> VideoDeviceImpl::getSystemDevices() {
+  QList<ImplVDPtr> VideoDeviceImpl::getSystemDevices() {
     int count = _getNumSystemDevices();
     char **IDs = new char*[count], **names = new char*[count];
     _getSystemDevices(IDs, names);
 
-    std::vector<ImplVDPtr> res;
+    QList<ImplVDPtr> res;
     res.reserve(count);
     for (int i = 0; i < count; i++) {
-      res.push_back(ImplVDPtr(new VideoDeviceImpl(IDs[i], names[i])));
+      res << ImplVDPtr(new VideoDeviceImpl(IDs[i], names[i]));
       delete IDs[i];
       delete names[i];      
     }

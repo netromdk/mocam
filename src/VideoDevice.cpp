@@ -17,11 +17,11 @@ namespace mocam {
     return VDPtr(new VideoDevice(VideoDeviceImpl::getDefaultDevice()));
   }
 
-  std::vector<VDPtr> VideoDevice::getSystemDevices() {
+  QList<VDPtr> VideoDevice::getSystemDevices() {
     auto udevs = VideoDeviceImpl::getSystemDevices();
-    std::vector<VDPtr> devs;
-    for (auto it = udevs.begin(); it != udevs.end(); ++it) {
-      devs.push_back(VDPtr(new VideoDevice(*it)));
+    QList<VDPtr> devs;
+    foreach (const auto &dev, udevs) {
+      devs << VDPtr(new VideoDevice(dev));
     }
     return devs;
   }

@@ -82,9 +82,8 @@ int main(int argc, char **argv) {
   if (args->list) {
     auto defDev = VideoDevice::getDefaultDevice();
     qDebug() << "Devices available on the system: (* = default)";
-    auto devs = VideoDevice::getSystemDevices();
-    for (auto it = devs.begin(); it != devs.end(); ++it) {
-      qDebug() << "  " << (*it) << (*it == defDev ? "*" : "");
+    foreach (const auto &dev, VideoDevice::getSystemDevices()) {
+      qDebug() << "  " << dev << (dev == defDev ? "*" : "");
     }
     return 0;
   }
@@ -95,10 +94,9 @@ int main(int argc, char **argv) {
     qDebug() << "Using default device:" << device->getName();
   }
   else {
-    auto devs = VideoDevice::getSystemDevices();
-    for (auto it = devs.begin(); it != devs.end(); ++it) {
-      if ((*it)->getUniqueId() == args->device) {
-        device = *it;
+    foreach (const auto &dev, VideoDevice::getSystemDevices()) {
+      if (dev->getUniqueId() == args->device) {
+        device = dev;
         break;
       }
     }
