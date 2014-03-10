@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
   const unsigned char *img = session.getSnapshot(len);
   cout << " done!" << " (" << len << " bytes)" << endl;
 
-  if (Util::writeFile(args->filename, (char*) img, len)) {
+  if (Util::writeToFile(args->filename, (char*) img, len)) {
     cout << "Saved to file: " << args->filename << endl;
   }
   else {

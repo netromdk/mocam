@@ -7,8 +7,8 @@ namespace mocam {
   class Util {
   public:
     static void toLower(std::string &data);
-    static bool writeFile(const std::string &filename, const char *data,
-                          int length);
+    static bool writeToFile(const std::string &filename, const char *data,
+                            int length);
   };
 }
 
