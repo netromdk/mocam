@@ -24,7 +24,11 @@ This utility is used to snap an image from a video device.
 Now you can run the program: ./bin/snapshot
 
 ```
-Usage: ./bin/snapshot (options) <output filename>
+Usage:  ./bin/snapshot  (options) <output filename>
+
+The format of the snapshot is dictated by the extension of <output filename>.
+Supported extensions: jpg, jpeg, and png.
+
 Options:
   --help | -h            Shows this message.
   --device | -d <id>    The device to take a snapshot from.
