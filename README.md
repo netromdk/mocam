@@ -34,4 +34,8 @@ Options:
   --list | -l          List all available video devices on the system.
   --device | -d <str>  The device to take a snapshot from.
   --quality | -q <n>   Quality of the snapshot in percentage (1-100).
+  --scale | -s <str>   Scales to the defined size given 'WidthxHeight'
+                       in pixels. Or scale keeping the size-ratio by
+                       'Xw' or 'Xh', where 'X' is the size to scale to
+                       in width or height respectively.
 ```
