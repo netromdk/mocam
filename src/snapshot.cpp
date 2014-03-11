@@ -43,11 +43,11 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
   int lastOpt = 0;
   for (int i = 1; i < argc; i++) {
     QString arg = QString::fromUtf8(argv[i]).trimmed().toLower();
-    if (arg.startsWith("--help") || arg.startsWith("-h")) {
+    if (arg == "--help" || arg == "-h") {
       usage(argv);
       exit(0);
     }
-    else if (arg.startsWith("--device") || arg.startsWith("-d")) {
+    else if (arg == "--device" || arg == "-d") {
       if (i >= argc - 1) {
         qCritical() << "Specify the device!";
         return nullptr;
@@ -57,7 +57,7 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
       args->device = QString::fromUtf8(argv[i]);
       if (i > lastOpt) lastOpt = i;
     }
-    else if (arg.startsWith("--list") || arg.startsWith("-l")) {
+    else if (arg == "--list" || arg == "-l") {
       args->list = true;
     }
   }
