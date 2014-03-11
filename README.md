@@ -8,7 +8,7 @@ Requirements
 ============
 
 A C++11 compliant compiler (GCC 4.7+, Clang 3.2+ etc.), CMake 2.8.8+,
-Qt 5.2+ and OpenCV library 2.4+.
+Qt 5.2+ and OpenCV 2.4+.
 
 snapshot
 ========
