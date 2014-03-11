@@ -13,24 +13,27 @@
 using namespace mocam;
 
 struct Arguments {
-  Arguments() : list(false) { }
+  Arguments() : list(false), quality(-1) { }
 
   QString filename, device;
   bool list;
+  int quality; // -1 means default with QImage
 };
 
 void usage(char **argv) {
-  qDebug() << "Usage: " << argv[0] << " (options) <output filename>" << endl
+  qDebug() << "Usage: " << argv[0] << " (<options>) <output filename>" << endl
            << endl
            << "The format of the snapshot is dictated by the extension of <output filename>."
            << endl
            << "Supported extensions: jpg, jpeg, and png." << endl << endl
            << "Options:" << endl
-           << "  --help | -h            Shows this message."
+           << "  --help | -h          Shows this message."
            << endl
-           << "  --device | -d <id>    The device to take a snapshot from."
+           << "  --list | -l          List all available video devices on the system."
            << endl
-           << "  --list | -l           List all available video devices on the system.";
+           << "  --device | -d <str>  The device to take a snapshot from."
+           << endl
+           << "  --quality | -q <n>   Quality of the snapshot in percentage (1-100).";
 }
 
 std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
@@ -59,6 +62,23 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
     }
     else if (arg == "--list" || arg == "-l") {
       args->list = true;
+    }
+    else if (arg == "--quality" || arg == "-q") {
+      if (i >= argc - 1) {
+        qCritical() << "Specify the quality in percentage!";
+        return nullptr;
+      }
+
+      i++;
+      bool ok;
+      unsigned int q = QString::fromUtf8(argv[i]).toUInt(&ok);
+      if (!ok || q == 0) {
+        qCritical() << "Invalid quality!";
+        return nullptr;
+      }
+
+      args->quality = q;
+      if (i > lastOpt) lastOpt = i;
     }
   }
 
@@ -142,8 +162,10 @@ int main(int argc, char **argv) {
 
   std::cout << " done!" << std::endl;
 
-  if (img.save(args->filename)) {
-    qDebug() << "Saved to file:" << args->filename;
+  QString qStr = QString("(%1% quality)").arg(args->quality);
+  if (img.save(args->filename, 0, args->quality)) {
+    qDebug() << "Saved to file:" << args->filename
+             << (args->quality != -1 ? qPrintable(qStr) : "");
   }
   else {
     qDebug() << "Could not save to file:" << args->filename;
