@@ -11,6 +11,9 @@ namespace mocam {
 
   QImage CaptureSession::getSnapshot(int width, int height) {
     QImage img = impl->getSnapshot();
+    if (img.isNull()) return img;
+
+    // Scale if necessary.
     if (width != -1 && height != -1) {
       return img.scaled(width, height, Qt::IgnoreAspectRatio,
                         Qt::SmoothTransformation);
