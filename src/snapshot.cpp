@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <QImage>
 #include <QString>
+#include <QFileInfo>
 #include <QCoreApplication>
 
 #include <memory>
@@ -16,18 +17,17 @@ struct Arguments {
 
   QString filename, device;
   bool list;
-  // format
 };
 
 void usage(char **argv) {
   qDebug() << "Usage: " << argv[0] << " (options) <output filename>" << endl
+           << endl
+           << "The format of the snapshot is dictated by the extension of <output filename>."
+           << endl
+           << "Supported extensions: jpg, jpeg, and png." << endl << endl
            << "Options:" << endl
            << "  --help | -h            Shows this message."
            << endl
-    /*
-      << "  --format | -f <fmt>   Snapshot format: 'jpg' or 'png'. Default is 'jpg'."
-      << endl
-    */
            << "  --device | -d <id>    The device to take a snapshot from."
            << endl
            << "  --list | -l           List all available video devices on the system.";
@@ -87,6 +87,18 @@ int main(int argc, char **argv) {
       qDebug() << "  " << dev << (dev == defDev ? "*" : "");
     }
     return 0;
+  }
+
+  QString ext = QFileInfo(args->filename).suffix().toLower();
+  if (ext.isEmpty()) {
+    qCritical() << "You have to specify a valid output extension.";
+    return -1;
+  }
+
+  QStringList exts = QStringList() << "jpg" << "jpeg" << "png";
+  if (!exts.contains(ext)) {
+    qCritical() << "Invalid output extension:" << ext;
+    return -1;
   }
 
   VDPtr device = nullptr;
