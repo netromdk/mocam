@@ -13,11 +13,12 @@
 using namespace mocam;
 
 struct Arguments {
-  Arguments() : list(false), quality(-1) { }
+  Arguments() : list(false), quality(-1), width(-1), height(-1) { }
 
   QString filename, device;
   bool list;
-  int quality; // -1 means default with QImage
+  int quality, // -1 means default with QImage
+    width, height;
 };
 
 void usage(char **argv) {
@@ -33,7 +34,12 @@ void usage(char **argv) {
            << endl
            << "  --device | -d <str>  The device to take a snapshot from."
            << endl
-           << "  --quality | -q <n>   Quality of the snapshot in percentage (1-100).";
+           << "  --quality | -q <n>   Quality of the snapshot in percentage (1-100)."
+           << endl
+           << "  --scale | -s <str>   Scales to the defined size given 'WidthxHeight'" << endl
+           << "                       in pixels. Or scale keeping the size-ratio by" << endl
+           << "                       'Xw' or 'Xh', where 'X' is the size to scale to" << endl
+           << "                       in width or height respectively.";
 }
 
 std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
@@ -79,6 +85,55 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
 
       args->quality = q;
       if (i > lastOpt) lastOpt = i;
+    }
+    else if (arg == "--scale" || arg == "-s") {
+      if (i >= argc - 1) {
+        qCritical() << "Specify the scaling!";
+        return nullptr;
+      }
+
+      i++;
+      QString scale = QString::fromUtf8(argv[i]).toLower();
+      if (scale.contains("x")) {
+        QStringList elms = scale.split("x", QString::SkipEmptyParts);
+        if (elms.size() != 2) {
+          qCritical() << "Invalid scaling!";
+          return nullptr;
+        }
+        bool ok1, ok2;
+        unsigned int w = elms[0].toUInt(&ok1), h = elms[1].toUInt(&ok2);
+        if (!ok1 || !ok2 || w == 0 || h == 0) {
+          qCritical() << "Invalid scaling!";
+          return nullptr;
+        }
+        args->width = w;
+        args->height = h;
+        if (i > lastOpt) lastOpt = i;
+      }
+      else if (scale.endsWith("w")) {
+        bool ok;
+        unsigned int w = scale.mid(0, scale.size() - 1).toUInt(&ok);
+        if (!ok || w == 0) {
+          qCritical() << "Invalid scaling!";
+          return nullptr;
+        }
+        args->width = w;
+        if (i > lastOpt) lastOpt = i;
+      }
+      else if (scale.endsWith("h")) {
+        bool ok;
+        unsigned int h = scale.mid(0, scale.size() - 1).toUInt(&ok);
+        if (!ok || h == 0) {
+          qCritical() << "Invalid scaling!";
+          return nullptr;
+        }
+        args->height = h;
+        if (i > lastOpt) lastOpt = i;
+      }
+      else {
+        qCritical() << "Invalid scaling!";
+        return nullptr;
+      }
     }
   }
 
@@ -154,7 +209,7 @@ int main(int argc, char **argv) {
   std::cout << "Getting snapshot..";
   std::cout.flush();
   
-  QImage img = session.getSnapshot();
+  QImage img = session.getSnapshot(args->width, args->height);
   if (img.isNull()) {
     qCritical() << endl << "Failed to get snapshot.";
     return -1;

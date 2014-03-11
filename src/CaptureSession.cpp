@@ -9,8 +9,19 @@ namespace mocam {
     return impl->setDevice(device);
   }
 
-  QImage CaptureSession::getSnapshot() {
-    return impl->getSnapshot();
+  QImage CaptureSession::getSnapshot(int width, int height) {
+    QImage img = impl->getSnapshot();
+    if (width != -1 && height != -1) {
+      return img.scaled(width, height, Qt::IgnoreAspectRatio,
+                        Qt::SmoothTransformation);
+    }
+    else if (width != -1 && height == -1) {
+      return img.scaledToWidth(width, Qt::SmoothTransformation);
+    }
+    else if (width == -1 && height != -1) {
+      return img.scaledToHeight(height, Qt::SmoothTransformation);
+    }
+    return img;
   }
 
   void CaptureSession::close() {

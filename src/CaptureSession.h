@@ -17,7 +17,16 @@ namespace mocam {
     CaptureSession();
 
     bool setDevice(VDPtr device);
-    QImage getSnapshot();
+
+    /**
+     * Get a snapshot of the video device.
+     *
+     * If both width and height are given then the output is scaled to
+     * match that, if one of them are specified (being not -1) then
+     * that size-ratio will be respected.
+     */
+    QImage getSnapshot(int widht = -1, int height = -1);
+
     void close();
 
   private:
