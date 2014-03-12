@@ -13,15 +13,21 @@
 using namespace mocam;
 
 struct Arguments {
-  QString filename;
+  QString filename, faceFile, eyesFile;
 };
 
 void usage(char **argv) {
-  qDebug() << "Usage: " << argv[0] << " <input file>";
+  qDebug() << "Detects faces and eyes in an image."
+           << endl << endl
+           << "Usage: " << argv[0] << " <face file> <eyes file> <image file>"
+           << endl << endl
+           << "<face file> and <eyes file> must to be cascade files in XML that"
+           << endl
+           << "are either LBP or HAAR types.";
 }
 
 std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
-  if (argc < 2) {
+  if (argc < 4) {
     return nullptr;
   }
 
@@ -33,6 +39,8 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
   }
   */
 
+  args->faceFile = QString::fromUtf8(argv[argc - 3]);
+  args->eyesFile = QString::fromUtf8(argv[argc - 2]);
   args->filename = QString::fromUtf8(argv[argc - 1]);
   return args;
 }
@@ -54,10 +62,10 @@ int main(int argc, char **argv) {
   qDebug() << "Loaded image..";
 
   cv::CascadeClassifier faceCas, eyesCas;
-  if (!faceCas.load("lbpcascade_frontalface.xml")) {
+  if (!faceCas.load(args->faceFile.toStdString())) {
     qCritical() << "Could not load facial cascade!";
   }
-  if (!eyesCas.load("haarcascade_eye_tree_eyeglasses.xml")) {
+  if (!eyesCas.load(args->eyesFile.toStdString())) {
     qCritical() << "Could not load eyes cascade!";
   }
   qDebug() << "Loaded cascade files..";

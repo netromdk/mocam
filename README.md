@@ -52,5 +52,10 @@ faces
 This utility is used to analyse for faces on one or several images.
 
 ```
-Usage:  ./bin/faces  <input file>
+Detects faces and eyes in an image.
+
+Usage:  ./bin/faces  <face file> <eyes file> <image file>
+
+<face file> and <eyes file> must to be cascade files in XML that
+are either LBP or HAAR types.
 ```
