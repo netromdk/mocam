@@ -1,3 +1,4 @@
+### snapshot ###
 SET(MAC_SOURCE)
 IF (APPLE)
   INCLUDE_DIRECTORIES(
@@ -24,9 +25,6 @@ ADD_EXECUTABLE(
   ${NAME}
   ${NAME}.cpp
 
-  Util.h
-  Util.cpp
-
   VideoDevice.h
   VideoDevice.cpp
 
@@ -38,3 +36,33 @@ ADD_EXECUTABLE(
 
 QT5_USE_MODULES(${NAME} Core Gui)
 TARGET_LINK_LIBRARIES(${NAME} ${EXTRA_LIBS})
+
+### faces ###
+SET(MAC_SOURCE)
+IF (APPLE)
+  SET(
+    MAC_SOURCE
+    # Add when used
+    )
+ENDIF()
+
+SET(NAME faces)
+
+ADD_EXECUTABLE(
+  ${NAME}
+  ${NAME}.cpp
+
+  Types.h
+
+  Util.h
+  Util.cpp
+
+  ${MAC_SOURCE}
+  )
+
+QT5_USE_MODULES(${NAME} Core Gui)
+TARGET_LINK_LIBRARIES(
+  ${NAME} 
+  ${EXTRA_LIBS} 
+  ${OpenCV_LIBS}
+  )

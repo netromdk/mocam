@@ -10,10 +10,10 @@ Requirements
 A C++11 compliant compiler (GCC 4.7+, Clang 3.2+ etc.), CMake 2.8.8+,
 Qt 5.2+ and OpenCV 2.4+.
 
-snapshot
-========
+Compilation
+===========
 
-This utility is used to snap an image from a video device.
+To compile the source code and link the binaries do the following:
 
 1. Extract source and go into the diretory.
 2. mkdir build
@@ -21,7 +21,13 @@ This utility is used to snap an image from a video device.
 4. cmake ..
 5. make
 
-Now you can run the program: ./bin/snapshot
+This produces two binaries in the *bin* folder: snapshot and faces
+
+snapshot
+========
+
+snapshot is used to snap an image from a video device and save it to
+disk.
 
 ```
 Usage:  ./bin/snapshot  (<options>) <output filename>
@@ -38,4 +44,13 @@ Options:
                        in pixels. Or scale keeping the size-ratio by
                        'Xw' or 'Xh', where 'X' is the size to scale to
                        in width or height respectively.
+```
+
+faces
+=====
+
+This utility is used to analyse for faces on one or several images.
+
+```
+Usage:  ./bin/faces  <input file>
 ```
