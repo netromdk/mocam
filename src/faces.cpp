@@ -70,11 +70,11 @@ int main(int argc, char **argv) {
   equalizeHist(grayImg, grayImg);
   qDebug() << "Created grayscale image and equalized histogram..";
 
-  // Detect faces with scale factor 1.1, minimum 2 neighbors and
+  // Detect faces with scale factor 1.1, minimum 3 neighbors and
   // minimum 80x80 face size.
   qDebug() << "Detect faces..";
   std::vector<cv::Rect> faces;
-  faceCas.detectMultiScale(grayImg, faces, 1.1, 2, 0, cv::Size(80, 80));
+  faceCas.detectMultiScale(grayImg, faces, 1.1, 3, 0, cv::Size(80, 80));
 
   for (auto it = faces.begin(); it != faces.end(); ++it) {
     const auto &face = *it;
@@ -83,11 +83,11 @@ int main(int argc, char **argv) {
       .arg(face.x) .arg(face.y).arg(face.width).arg(face.height);
     qDebug() << qPrintable(msg);
 
-    // Detect two eyes for each face with scale factor 1.1, 2
+    // Detect two eyes for each face with scale factor 1.1, 3
     // min. neighbors and min size of 30x30.
     cv::Mat facePart = grayImg(face);
     std::vector<cv::Rect> eyes;
-    eyesCas.detectMultiScale(facePart, eyes, 1.1, 2, 0 | cv::CASCADE_SCALE_IMAGE,
+    eyesCas.detectMultiScale(facePart, eyes, 1.1, 3, 0 | cv::CASCADE_SCALE_IMAGE,
                              cv::Size(30, 30));
     if (eyes.size() != 2) {
       continue;
