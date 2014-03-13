@@ -15,10 +15,10 @@
 using namespace mocam;
 
 struct Arguments {
-  Arguments() : noFaces(false) { }
+  Arguments() : noFaces(false), noEyes(false) { }
 
   QString filename, faceFile, eyesFile, overlayFile;
-  bool noFaces;
+  bool noFaces, noEyes;
 };
 
 void usage(char **argv) {
@@ -32,9 +32,11 @@ void usage(char **argv) {
            << endl << endl
            << "Options:"
            << endl
-           << "  --overlay | -o <file>       Write image with overlays to file."
+           << "  --overlay | -o <file>   Write image with overlays to file."
            << endl
-           << "  --no-faces | -nf            Don't draw faces to overlay.";
+           << "  --no-faces | -nf        Don't draw faces to overlay."
+           << endl
+           << "  --no-eyes | -ne         Don't draw eyes to overlay.";
 }
 
 std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
@@ -61,6 +63,15 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
       args->noFaces = true;
       if (i > lastOpt) lastOpt = i;
     }
+    else if (arg == "--no-eyes" || arg == "-ne") {
+      args->noEyes = true;
+      if (i > lastOpt) lastOpt = i;
+    }
+  }
+
+  if (!args->overlayFile.isEmpty() && args->noFaces && args->noEyes) {
+    qCritical() << "You can't disable the drawing of both faces and eyes!";
+    return nullptr;
   }
 
   // If last opt was after the filename then stop.
@@ -162,7 +173,7 @@ int main(int argc, char **argv) {
       .arg(eye2.x()).arg(eye2.y()).arg(eye2.width()).arg(eye2.height());
     qDebug() << qPrintable(msg);
 
-    if (doOverlay) {
+    if (doOverlay && !args->noEyes) {
       painter.drawRect(eye1);
       painter.drawRect(eye2);
     }
