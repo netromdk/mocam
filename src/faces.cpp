@@ -15,7 +15,10 @@
 using namespace mocam;
 
 struct Arguments {
+  Arguments() : noFaces(false) { }
+
   QString filename, faceFile, eyesFile, overlayFile;
+  bool noFaces;
 };
 
 void usage(char **argv) {
@@ -29,7 +32,9 @@ void usage(char **argv) {
            << endl << endl
            << "Options:"
            << endl
-           << "  --overlay | -o <file>       Write image with overlays to file.";
+           << "  --overlay | -o <file>       Write image with overlays to file."
+           << endl
+           << "  --no-faces | -nf            Don't draw faces to overlay.";
 }
 
 std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
@@ -50,6 +55,10 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
 
       i++;
       args->overlayFile = QString::fromUtf8(argv[i]);
+      if (i > lastOpt) lastOpt = i;
+    }
+    else if (arg == "--no-faces" || arg == "-nf") {
+      args->noFaces = true;
       if (i > lastOpt) lastOpt = i;
     }
   }
@@ -132,8 +141,10 @@ int main(int argc, char **argv) {
     QString msg = QString("  Face at (%1,%2) %3x%4")
       .arg(face.x) .arg(face.y).arg(face.width).arg(face.height);
     qDebug() << qPrintable(msg);
- 
-    painter.drawRect(faceRect);
+
+    if (doOverlay && !args->noFaces) {
+      painter.drawRect(faceRect);
+    }
 
     // Detect two eyes for each face with scale factor 1.1, 3
     // min. neighbors and min size of 30x30.
@@ -151,8 +162,10 @@ int main(int argc, char **argv) {
       .arg(eye2.x()).arg(eye2.y()).arg(eye2.width()).arg(eye2.height());
     qDebug() << qPrintable(msg);
 
-    painter.drawRect(eye1);
-    painter.drawRect(eye2);
+    if (doOverlay) {
+      painter.drawRect(eye1);
+      painter.drawRect(eye2);
+    }
   }
 
   // Save overlay to file.
