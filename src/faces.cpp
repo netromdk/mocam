@@ -32,6 +32,8 @@ void usage(char **argv) {
            << endl << endl
            << "Options:"
            << endl
+           << "  --help | -h             Shows this message."
+           << endl
            << "  --overlay | -o <file>   Write image with overlays to file."
            << endl
            << "  --no-faces | -nf        Don't draw faces to overlay."
@@ -49,7 +51,11 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
   int lastOpt = 0;
   for (int i = 1; i < argc; i++) {
     QString arg = QString::fromUtf8(argv[i]).trimmed().toLower();
-    if (arg == "--overlay" || arg == "-o") {
+    if (arg == "--help" || arg == "-h") {
+      usage(argv);
+      exit(0);
+    }
+    else if (arg == "--overlay" || arg == "-o") {
       if (i >= argc - 1) {
         qCritical() << "Specify the file to write overlays to!";
         return nullptr;
