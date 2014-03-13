@@ -110,11 +110,10 @@ int main(int argc, char **argv) {
   qDebug() << "Loaded image..";
 
   // Prepare for overlay drawing.
-  QImage overlay;
+  QImage overlay = QImage::fromData(imageData);
   QPainter painter;
   bool doOverlay = !args->overlayFile.isEmpty();
   if (doOverlay) {
-    overlay = QImage::fromData(imageData);
     painter.begin(&overlay);
 
     QPen pen = painter.pen();
@@ -150,7 +149,8 @@ int main(int argc, char **argv) {
     QRect faceRect(face.x, face.y, face.width, face.height);
 
     QString msg = QString("  Face at (%1,%2) %3x%4")
-      .arg(face.x) .arg(face.y).arg(face.width).arg(face.height);
+      .arg(face.x) .arg(overlay.height() - face.y).arg(face.width)
+      .arg(face.height);
     qDebug() << qPrintable(msg);
 
     if (doOverlay && !args->noFaces) {
@@ -169,8 +169,8 @@ int main(int argc, char **argv) {
     QRect eye1(eyes[0].x + face.x, eyes[0].y + face.y, eyes[0].width, eyes[0].height),
       eye2(eyes[1].x + face.x, eyes[1].y + face.y, eyes[1].width, eyes[1].height);
     msg = QString("    Eyes at (%1,%2) %3x%4 and (%5,%6) %7x%8")
-      .arg(eye1.x()).arg(eye1.y()).arg(eye1.width()).arg(eye1.height())
-      .arg(eye2.x()).arg(eye2.y()).arg(eye2.width()).arg(eye2.height());
+      .arg(eye1.x()).arg(overlay.height() - eye1.y()).arg(eye1.width()).arg(eye1.height())
+      .arg(eye2.x()).arg(overlay.height() - eye2.y()).arg(eye2.width()).arg(eye2.height());
     qDebug() << qPrintable(msg);
 
     if (doOverlay && !args->noEyes) {
