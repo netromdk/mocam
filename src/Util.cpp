@@ -1,4 +1,6 @@
 #include <QFile>
+#include <QImage>
+#include <QBuffer>
 #include <QString>
 #include <QByteArray>
 
@@ -11,6 +13,14 @@ namespace mocam {
       return nullptr;
     }
     return imageToMat(f.readAll());
+  }
+
+  MatPtr Util::imageToMat(const QImage &image, const char *fmt) {
+    QByteArray arr;
+    QBuffer buf(&arr);
+    buf.open(QIODevice::WriteOnly);
+    image.save(&buf, fmt);
+    return imageToMat(arr);
   }
 
   MatPtr Util::imageToMat(const QByteArray &data) {
