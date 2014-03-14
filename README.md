@@ -60,8 +60,9 @@ Usage:  ./bin/faces  (<options>) <face file> <eyes file> <image file>
 are either LBP or HAAR types.
 
 Options:
-  --help | -h             Shows this message.
-  --overlay | -o <file>   Write image with overlays to file.
-  --no-faces | -nf        Don't draw faces to overlay.
-  --no-eyes | -ne         Don't draw eyes to overlay.
+  --help | -h              Shows this message.
+  --overlay | -o <file>    Write image with overlays to file.
+  --no-faces | -nf         Don't draw faces to overlay.
+  --no-eyes | -ne          Don't draw eyes to overlay.
+  --out-data | -od <file>  Write faces to an XML file.
 ```
