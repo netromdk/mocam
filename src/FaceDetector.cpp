@@ -44,9 +44,35 @@ namespace mocam {
       eyesCas.detectMultiScale(facePart, eyes, 1.1, 3,
                                0 | cv::CASCADE_SCALE_IMAGE, cv::Size(30, 30));
       if (eyes.size() >= 2) {
+        // Take the two largest.
+        auto &eye1 = eyes[0], &eye2 = eyes[1];
+        int area1 = eye1.width * eye1.height,
+          area2 = eye2.width * eye2.height;
+        if (area1 > area2) {
+          qSwap<cv::Rect>(eye1, eye2);
+          qSwap<int>(area1, area2);
+        }
+        for (int i = 2; i < eyes.size(); i++) {
+          const auto &eye = eyes[i];
+          int area = eye.width * eye.height;
+          if (area > area1 && area < area2) {
+            eye1 = eye;
+            area1 = area;
+          }
+          else if (area > area2 && area < area1) {
+            eye2 = eye;
+            area2 = area;
+          }
+          else if (area > area1 && area > area2) {
+            eye1 = eye;
+            area1 = area;
+            qSwap<cv::Rect>(eye1, eye2);
+            qSwap<int>(area1, area2);
+          }
+        }
+
         // Since we are only looking at the sub-region of the face we
         // need to convert into image coordinates.
-        auto &eye1 = eyes[0], &eye2 = eyes[1];
         eye1.x += f.x; eye1.y += f.y;
         eye2.x += f.x; eye2.y += f.y;
         face->setEyes(eye1, eye2);
