@@ -2,10 +2,14 @@
 #define MOCAM_FACE_H
 
 #include <QPair>
+#include <QDebug>
 
 #include <opencv2/opencv.hpp>
 
 namespace mocam {
+  class Face;
+  typedef std::shared_ptr<Face> FacePtr;
+
   class Face {
   public:
     Face();
@@ -32,6 +36,8 @@ namespace mocam {
     cv::Rect face, eye1, eye2;
     bool hasFace_, hasEye1_, hasEye2_;
   };
+
+  QDebug operator<<(QDebug dbg, FacePtr face);
 }
 
 #endif // MOCAM_FACE_H

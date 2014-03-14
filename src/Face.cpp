@@ -26,4 +26,22 @@ namespace mocam {
   QPair<cv::Rect, cv::Rect> Face::getEyes() const {
     return QPair<cv::Rect, cv::Rect>(eye1, eye2);
   }
+
+  QDebug operator<<(QDebug dbg, FacePtr face) {
+    QString msg("{ ");
+    if (face->hasFace()) {
+      auto f = face->getFace();
+      msg.append(QString("face @ (%1,%2) %3x%4")
+                 .arg(f.x).arg(f.y).arg(f.width).arg(f.height));
+    }
+    if (face->hasEyes()) {
+      auto e1 = face->getEye1(), e2 = face->getEye2();
+      msg.append(QString(", eyes @ (%1,%2) %3x%4 (%5,%6) %7x%8")
+                 .arg(e1.x).arg(e1.y).arg(e1.width).arg(e1.height)
+                 .arg(e2.x).arg(e2.y).arg(e2.width).arg(e2.height));
+    }
+    msg.append(" }");
+    dbg << qPrintable(msg);
+    return dbg;
+  }
 }

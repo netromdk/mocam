@@ -5,6 +5,7 @@
 
 #include <opencv2/opencv.hpp>
 
+#include "Face.h"
 #include "Types.h"
 
 class QString;
@@ -15,7 +16,6 @@ namespace mocam {
     FaceDetector(const QString &faceCascade, const QString &eyesCascade);
 
     bool isValid() const { return valid; }
-
     QList<FacePtr> detect(const MatPtr image);
 
   private:

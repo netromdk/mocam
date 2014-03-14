@@ -143,7 +143,7 @@ int main(int argc, char **argv) {
   qDebug() << "Found" << faces.size() << "face(s).";
 
   foreach (const auto &face, faces) {
-    //qDebug() << face;
+    qDebug() << face;
 
     if (doOverlay) {
       if (!args->noFaces) {
