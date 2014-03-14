@@ -2,11 +2,13 @@
 #define MOCAM_UTIL_H
 
 #include <QRect>
+#include <QList>
 
 #include <memory>
 
 #include <opencv2/opencv.hpp>
 
+#include "Face.h"
 #include "Types.h"
 
 class QImage;
@@ -22,6 +24,10 @@ namespace mocam {
     static MatPtr imageToMat(const char *data, int len);
 
     static QRect toQRect(const cv::Rect &rect);
+
+    static bool saveOverlays(const QString &outFile, QImage &image,
+                             const QList<FacePtr> &faces, bool noFaces = false,
+                             bool noEyes = false);
   };
 }
 

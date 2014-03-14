@@ -2,6 +2,7 @@
 #include <QImage>
 #include <QBuffer>
 #include <QString>
+#include <QPainter>
 #include <QByteArray>
 
 #include "Util.h"
@@ -44,5 +45,29 @@ namespace mocam {
 
   QRect Util::toQRect(const cv::Rect &rect) {
     return QRect(rect.x, rect.y, rect.width, rect.height);
+  }
+
+  bool Util::saveOverlays(const QString &outFile, QImage &image,
+                          const QList<FacePtr> &faces, bool noFaces,
+                          bool noEyes) {
+    QPainter painter;
+    painter.begin(&image);
+
+    QPen pen = painter.pen();
+    pen.setWidth(3);
+    painter.setPen(pen);
+
+    foreach (const auto &face, faces) {
+      if (!noFaces) {
+        painter.drawRect(Util::toQRect(face->getFace()));
+      }
+      if (!noEyes && face->hasEyes()) {
+        painter.drawRect(Util::toQRect(face->getEye1()));
+        painter.drawRect(Util::toQRect(face->getEye2()));
+      }
+    }
+
+    painter.end();
+    return image.save(outFile);
   }
 }

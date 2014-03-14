@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QImage>
 #include <QString>
-#include <QPainter>
 #include <QCoreApplication>
 
 #include <memory>
@@ -17,7 +16,7 @@ using namespace mocam;
 struct Arguments {
   Arguments() : noFaces(false), noEyes(false) { }
 
-  QString filename, faceFile, eyesFile, overlayFile;
+  QString filename, faceFile, eyesFile, overlayFile, dataFile;
   bool noFaces, noEyes;
 };
 
@@ -32,13 +31,15 @@ void usage(char **argv) {
            << endl << endl
            << "Options:"
            << endl
-           << "  --help | -h             Shows this message."
+           << "  --help | -h              Shows this message."
            << endl
-           << "  --overlay | -o <file>   Write image with overlays to file."
+           << "  --overlay | -o <file>    Write image with overlays to file."
            << endl
-           << "  --no-faces | -nf        Don't draw faces to overlay."
+           << "  --no-faces | -nf         Don't draw faces to overlay."
            << endl
-           << "  --no-eyes | -ne         Don't draw eyes to overlay.";
+           << "  --no-eyes | -ne          Don't draw eyes to overlay."
+           << endl
+           << "  --out-data | -od <file>  Write faces to an XML file.";
 }
 
 std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
@@ -71,6 +72,16 @@ std::unique_ptr<Arguments> parseArgs(int argc, char **argv) {
     }
     else if (arg == "--no-eyes" || arg == "-ne") {
       args->noEyes = true;
+      if (i > lastOpt) lastOpt = i;
+    }
+    else if (arg == "--out-data" || arg == "-od") {
+      if (i >= argc - 1) {
+        qCritical() << "Specify the file to write faces to!";
+        return nullptr;
+      }
+
+      i++;
+      args->dataFile = QString::fromUtf8(argv[i]);
       if (i > lastOpt) lastOpt = i;
     }
   }
@@ -115,18 +126,6 @@ int main(int argc, char **argv) {
   }
   qDebug() << "Loaded image..";
 
-  // Prepare for overlay drawing.
-  QImage overlay = QImage::fromData(imageData);
-  QPainter painter;
-  bool doOverlay = !args->overlayFile.isEmpty();
-  if (doOverlay) {
-    painter.begin(&overlay);
-
-    QPen pen = painter.pen();
-    pen.setWidth(3);
-    painter.setPen(pen);
-  }
-
   FaceDetector detector(args->faceFile, args->eyesFile);
   if (!detector.isValid()) {
     qCritical() << "Could not setup facial detector.";
@@ -141,29 +140,17 @@ int main(int argc, char **argv) {
   }
 
   qDebug() << "Found" << faces.size() << "face(s).";
+  qDebug() << faces;
 
-  foreach (const auto &face, faces) {
-    qDebug() << face;
-
-    if (doOverlay) {
-      if (!args->noFaces) {
-        painter.drawRect(Util::toQRect(face->getFace()));
-      }
-      if (!args->noEyes && face->hasEyes()) {
-        painter.drawRect(Util::toQRect(face->getEye1()));
-        painter.drawRect(Util::toQRect(face->getEye2()));
-      }
-    }
-  }
-
-  // Save overlay to file.
-  if (doOverlay) {
-    painter.end();
-    if (overlay.save(args->overlayFile)) {
-      qDebug() << "Saved overlay to:" << args->overlayFile;
+  // Write overlays to file.
+  if (!args->overlayFile.isEmpty()) {
+    QImage overlay = QImage::fromData(imageData);
+    if (Util::saveOverlays(args->overlayFile, overlay, faces, args->noFaces,
+                           args->noEyes)) {
+      qDebug() << "Saved overlays to:" << args->overlayFile;
     }
     else {
-      qCritical() << "Could not save overlay.";
+      qCritical() << "Could not save overlays";
     }
   }
   
