@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
   qDebug() << "Found" << faces.size() << "face(s).";
   qDebug() << faces;
 
-  // Write overlays to file.
+  // Write overlays to image file.
   if (!args->overlayFile.isEmpty()) {
     QImage overlay = QImage::fromData(imageData);
     if (Util::saveOverlays(args->overlayFile, overlay, faces, args->noFaces,
@@ -151,6 +151,16 @@ int main(int argc, char **argv) {
     }
     else {
       qCritical() << "Could not save overlays";
+    }
+  }
+
+  // Write overlays to XML file.
+  if (!args->dataFile.isEmpty()) {
+    if (Util::exportFacesXml(args->dataFile, faces)) {
+      qDebug() << "Exported faces to:" << args->dataFile;
+    }
+    else {
+      qCritical() << "Could not export faces to XML";
     }
   }
   

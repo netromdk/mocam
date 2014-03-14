@@ -4,6 +4,7 @@
 #include <QString>
 #include <QPainter>
 #include <QByteArray>
+#include <QXmlStreamWriter>
 
 #include "Util.h"
 
@@ -59,15 +60,67 @@ namespace mocam {
 
     foreach (const auto &face, faces) {
       if (!noFaces) {
-        painter.drawRect(Util::toQRect(face->getFace()));
+        painter.drawRect(toQRect(face->getFace()));
       }
       if (!noEyes && face->hasEyes()) {
-        painter.drawRect(Util::toQRect(face->getEye1()));
-        painter.drawRect(Util::toQRect(face->getEye2()));
+        painter.drawRect(toQRect(face->getEye1()));
+        painter.drawRect(toQRect(face->getEye2()));
       }
     }
 
     painter.end();
     return image.save(outFile);
+  }
+
+  bool Util::exportFacesXml(const QString &outFile,
+                            const QList<FacePtr> &faces) {
+    QFile file(outFile);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+      return false;
+    }
+
+    QXmlStreamWriter writer(&file);
+    writer.setAutoFormattingIndent(2);
+    writer.setAutoFormatting(true);
+    writer.writeStartDocument();
+    writer.writeStartElement("Faces");
+    
+    foreach (const auto &face, faces) {
+      if (!face->hasFace()) continue;
+
+      const auto f = face->getFace();
+      writer.writeStartElement("Face");
+      writer.writeAttribute("x", QString::number(f.x));
+      writer.writeAttribute("y", QString::number(f.y));
+      writer.writeAttribute("width", QString::number(f.width));
+      writer.writeAttribute("height", QString::number(f.height));
+
+      if (face->hasEyes()) {
+        const auto e1 = face->getEye1();
+        writer.writeStartElement("Eye1");
+        writer.writeAttribute("x", QString::number(e1.x));
+        writer.writeAttribute("y", QString::number(e1.y));
+        writer.writeAttribute("width", QString::number(e1.width));
+        writer.writeAttribute("height", QString::number(e1.height));
+        writer.writeEndElement();
+
+        const auto e2 = face->getEye2();        
+        writer.writeStartElement("Eye2");
+        writer.writeAttribute("x", QString::number(e2.x));
+        writer.writeAttribute("y", QString::number(e2.y));
+        writer.writeAttribute("width", QString::number(e2.width));
+        writer.writeAttribute("height", QString::number(e2.height));
+        writer.writeEndElement();        
+      }
+      
+      writer.writeEndElement();
+    }
+    
+    writer.writeEndElement();
+    writer.writeEndDocument();
+    
+    file.flush();    
+    file.close();
+    return true;
   }
 }
