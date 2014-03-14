@@ -5,13 +5,13 @@
 #include <QPainter>
 #include <QCoreApplication>
 
-#include <vector>
 #include <memory>
 
 #include <opencv2/opencv.hpp>
 
 #include "Util.h"
 #include "Types.h"
+#include "FaceDetector.h"
 using namespace mocam;
 
 struct Arguments {
@@ -127,61 +127,32 @@ int main(int argc, char **argv) {
     painter.setPen(pen);
   }
 
-  cv::CascadeClassifier faceCas, eyesCas;
-  if (!faceCas.load(args->faceFile.toStdString())) {
-    qCritical() << "Could not load facial cascade!";
+  FaceDetector detector(args->faceFile, args->eyesFile);
+  if (!detector.isValid()) {
+    qCritical() << "Could not setup facial detector.";
+    return -1;
   }
-  if (!eyesCas.load(args->eyesFile.toStdString())) {
-    qCritical() << "Could not load eyes cascade!";
+
+  qDebug() << "Detecting faces..";
+  QList<FacePtr> faces = detector.detect(image);
+  if (faces.isEmpty()) {
+    qDebug() << "Did not find any faces!";
+    return 0;
   }
-  qDebug() << "Loaded cascade files..";
 
-  // Make grayscaled version of the image, and equalize the histogram
-  // which normalizes the brightness and increases the contrast in the
-  // image.
-  cv::Mat grayImg;
-  cvtColor(*image.get(), grayImg, cv::COLOR_BGR2GRAY);
-  equalizeHist(grayImg, grayImg);
-  qDebug() << "Created grayscale image and equalized histogram..";
+  qDebug() << "Found" << faces.size() << "face(s).";
 
-  // Detect faces with scale factor 1.1, minimum 3 neighbors and
-  // minimum 80x80 face size.
-  qDebug() << "Detect faces..";
-  std::vector<cv::Rect> faces;
-  faceCas.detectMultiScale(grayImg, faces, 1.1, 3, 0, cv::Size(80, 80));
+  foreach (const auto &face, faces) {
+    //qDebug() << face;
 
-  for (auto it = faces.begin(); it != faces.end(); ++it) {
-    const auto &face = *it;
-    QRect faceRect(face.x, face.y, face.width, face.height);
-
-    QString msg = QString("  Face at (%1,%2) %3x%4")
-      .arg(face.x) .arg(overlay.height() - face.y).arg(face.width)
-      .arg(face.height);
-    qDebug() << qPrintable(msg);
-
-    if (doOverlay && !args->noFaces) {
-      painter.drawRect(faceRect);
-    }
-
-    // Detect two eyes for each face with scale factor 1.1, 3
-    // min. neighbors and min size of 30x30.
-    cv::Mat facePart = grayImg(face);
-    std::vector<cv::Rect> eyes;
-    eyesCas.detectMultiScale(facePart, eyes, 1.1, 3, 0 | cv::CASCADE_SCALE_IMAGE,
-                             cv::Size(25, 25));
-    if (eyes.size() != 2) {
-      continue;
-    }
-    QRect eye1(eyes[0].x + face.x, eyes[0].y + face.y, eyes[0].width, eyes[0].height),
-      eye2(eyes[1].x + face.x, eyes[1].y + face.y, eyes[1].width, eyes[1].height);
-    msg = QString("    Eyes at (%1,%2) %3x%4 and (%5,%6) %7x%8")
-      .arg(eye1.x()).arg(overlay.height() - eye1.y()).arg(eye1.width()).arg(eye1.height())
-      .arg(eye2.x()).arg(overlay.height() - eye2.y()).arg(eye2.width()).arg(eye2.height());
-    qDebug() << qPrintable(msg);
-
-    if (doOverlay && !args->noEyes) {
-      painter.drawRect(eye1);
-      painter.drawRect(eye2);
+    if (doOverlay) {
+      if (!args->noFaces) {
+        painter.drawRect(Util::toQRect(face->getFace()));
+      }
+      if (!args->noEyes && face->hasEyes()) {
+        painter.drawRect(Util::toQRect(face->getEye1()));
+        painter.drawRect(Util::toQRect(face->getEye2()));
+      }
     }
   }
 

@@ -1,6 +1,8 @@
 #ifndef MOCAM_UTIL_H
 #define MOCAM_UTIL_H
 
+#include <QRect>
+
 #include <memory>
 
 #include <opencv2/opencv.hpp>
@@ -18,6 +20,8 @@ namespace mocam {
     static MatPtr imageToMat(const QImage &image, const char *fmt = "PNG");
     static MatPtr imageToMat(const QByteArray &data);
     static MatPtr imageToMat(const char *data, int len);
+
+    static QRect toQRect(const cv::Rect &rect);
   };
 }
 

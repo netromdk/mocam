@@ -41,4 +41,8 @@ namespace mocam {
     imdecode(cv::Mat(vec), CV_LOAD_IMAGE_COLOR, mat.get());
     return mat;
   }
+
+  QRect Util::toQRect(const cv::Rect &rect) {
+    return QRect(rect.x, rect.y, rect.width, rect.height);
+  }
 }

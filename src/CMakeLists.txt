@@ -57,6 +57,12 @@ ADD_EXECUTABLE(
   Util.h
   Util.cpp
 
+  Face.h
+  Face.cpp
+
+  FaceDetector.h
+  FaceDetector.cpp
+
   ${MAC_SOURCE}
   )
 
