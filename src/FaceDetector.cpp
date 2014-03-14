@@ -42,8 +42,8 @@ namespace mocam {
       cv::Mat facePart = grayImg(f);
       std::vector<cv::Rect> eyes;
       eyesCas.detectMultiScale(facePart, eyes, 1.1, 3,
-                               0 | cv::CASCADE_SCALE_IMAGE, cv::Size(25, 25));
-      if (eyes.size() == 2) {
+                               0 | cv::CASCADE_SCALE_IMAGE, cv::Size(30, 30));
+      if (eyes.size() >= 2) {
         // Since we are only looking at the sub-region of the face we
         // need to convert into image coordinates.
         auto &eye1 = eyes[0], &eye2 = eyes[1];
