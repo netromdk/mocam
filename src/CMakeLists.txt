@@ -39,12 +39,6 @@ TARGET_LINK_LIBRARIES(${NAME} ${EXTRA_LIBS})
 
 ### faces ###
 SET(MAC_SOURCE)
-IF (APPLE)
-  SET(
-    MAC_SOURCE
-    # Add when used
-    )
-ENDIF()
 
 SET(NAME faces)
 
@@ -67,6 +61,48 @@ ADD_EXECUTABLE(
   )
 
 QT5_USE_MODULES(${NAME} Core Gui)
+TARGET_LINK_LIBRARIES(
+  ${NAME} 
+  ${EXTRA_LIBS} 
+  ${OpenCV_LIBS}
+  )
+
+### mocam ###
+SET(MAC_SOURCE)
+IF (APPLE)
+  SET(
+    MAC_SOURCE
+
+    mac/MacUtil.h
+    mac/MacUtil.m
+
+    mac/VideoDeviceImpl.h
+    mac/VideoDeviceImpl.cpp
+
+    mac/CaptureSessionImpl.h
+    mac/CaptureSessionImpl.cpp
+    )
+ENDIF()
+
+SET(NAME mocam)
+
+ADD_EXECUTABLE(
+  ${NAME}
+  ${NAME}.cpp
+
+  Window.h
+  Window.cpp
+
+  VideoDevice.h
+  VideoDevice.cpp
+
+  CaptureSession.h
+  CaptureSession.cpp
+
+  ${MAC_SOURCE}
+  )
+
+QT5_USE_MODULES(${NAME} Core Gui Widgets)
 TARGET_LINK_LIBRARIES(
   ${NAME} 
   ${EXTRA_LIBS} 
