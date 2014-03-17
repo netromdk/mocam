@@ -63,7 +63,7 @@ namespace mocam {
     _startSession(handleSession);
 
     if (stream) {
-      // TODO: handle if one is already running.
+      if (grabber) return;      
       grabber = new FrameGrabber(this);
       connect(grabber, SIGNAL(frameCaptured(FramePtr)),
               SIGNAL(frameCaptured(FramePtr)));
@@ -73,11 +73,17 @@ namespace mocam {
   }
   
   void CaptureSessionImpl::stop() {
-    _stopSession(handleSession);    
+    if (grabber) {
+      grabber->terminate();
+      grabber->deleteLater();
+      grabber = nullptr;
+    }
+    
+    _stopSession(handleSession);
   }
 
   void CaptureSessionImpl::close() {
-    _stopSession(handleSession);
+    stop();
     
     if (handleInput) {
       _releaseSessionInput(handleInput, handleSession);
