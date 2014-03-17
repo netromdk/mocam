@@ -1,12 +1,13 @@
 #include <QDebug>
 #include <QLabel>
+#include <QDateTime>
 #include <QVBoxLayout>
 #include <QMessageBox>
 
 #include "Window.h"
 
 namespace mocam {
-  Window::Window(QWidget *parent) : QWidget(parent) {
+  Window::Window(QWidget *parent) : QWidget(parent), fps(0) {
     setupLayout();
     setupVideo();
 
@@ -21,7 +22,21 @@ namespace mocam {
   }
 
   void Window::onFrameCaptured(FramePtr frame) {
-    frameLbl->setPixmap(QPixmap::fromImage(*frame));
+    QImage img = frame->scaledToWidth(640);
+    frameLbl->setPixmap(QPixmap::fromImage(img));
+
+    static int frames = 0;
+    frames++;
+
+    static QDateTime last = QDateTime::currentDateTime();
+    QDateTime now(QDateTime::currentDateTime());
+    if (last.msecsTo(now) >= 1000) {
+      fps = frames;
+      frames = 0;
+      last = now;
+    }
+
+    setTitle();
   }
 
   void Window::setupLayout() {
@@ -40,7 +55,7 @@ namespace mocam {
       // TODO: quit
       return;
     }
-    setWindowTitle(tr("MoCam (device: %1)").arg(device->getName()));
+    setTitle();
 
     device->init();
     if (!session.setDevice(device)) {
@@ -52,5 +67,12 @@ namespace mocam {
     connect(&session, SIGNAL(frameCaptured(FramePtr)),
             SLOT(onFrameCaptured(FramePtr)));
     session.start();
+  }
+
+  void Window::setTitle() {
+    QString title = tr("MoCam (%1 @ %2 fps)")
+      .arg(device->getName())
+      .arg(fps == 0 ? tr("N.A.") : QString::number(fps));
+    setWindowTitle(title);
   }
 }

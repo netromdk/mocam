@@ -23,11 +23,13 @@ namespace mocam {
   private:
     void setupLayout();
     void setupVideo();
+    void setTitle();
     
     QLabel *frameLbl;
 
     CaptureSession session;
     VDPtr device;
+    int fps;
   };
 }
 
