@@ -10,6 +10,8 @@
 class QLabel;
 
 namespace mocam {
+  class FaceDetector;
+
   class Window : public QWidget {
     Q_OBJECT
     
@@ -29,6 +31,7 @@ namespace mocam {
 
     CaptureSession session;
     VDPtr device;
+    FaceDetector *detector;
     int fps;
   };
 }

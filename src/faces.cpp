@@ -145,8 +145,8 @@ int main(int argc, char **argv) {
   // Write overlays to image file.
   if (!args->overlayFile.isEmpty()) {
     QImage overlay = QImage::fromData(imageData);
-    if (Util::saveOverlays(args->overlayFile, overlay, faces, args->noFaces,
-                           args->noEyes)) {
+    Util::paintOverlays(overlay, faces, args->noFaces, args->noEyes);
+    if (overlay.save(args->overlayFile)) {
       qDebug() << "Saved overlays to:" << args->overlayFile;
     }
     else {

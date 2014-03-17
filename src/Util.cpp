@@ -48,9 +48,8 @@ namespace mocam {
     return QRect(rect.x, rect.y, rect.width, rect.height);
   }
 
-  bool Util::saveOverlays(const QString &outFile, QImage &image,
-                          const QList<FacePtr> &faces, bool noFaces,
-                          bool noEyes) {
+  void Util::paintOverlays(QImage &image, const QList<FacePtr> &faces,
+                           bool noFaces, bool noEyes) {
     QPainter painter;
     painter.begin(&image);
 
@@ -69,7 +68,6 @@ namespace mocam {
     }
 
     painter.end();
-    return image.save(outFile);
   }
 
   bool Util::exportFacesXml(const QString &outFile,

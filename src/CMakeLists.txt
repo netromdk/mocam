@@ -97,6 +97,9 @@ ADD_EXECUTABLE(
   Types.h
   Types.cpp
 
+  Util.h
+  Util.cpp
+
   Window.h
   Window.cpp
 
@@ -105,6 +108,12 @@ ADD_EXECUTABLE(
 
   CaptureSession.h
   CaptureSession.cpp
+
+  Face.h
+  Face.cpp
+
+  FaceDetector.h
+  FaceDetector.cpp
 
   ${MAC_SOURCE}
   )

@@ -4,10 +4,12 @@
 #include <QVBoxLayout>
 #include <QMessageBox>
 
+#include "Util.h"
 #include "Window.h"
+#include "FaceDetector.h"
 
 namespace mocam {
-  Window::Window(QWidget *parent) : QWidget(parent), fps(0) {
+  Window::Window(QWidget *parent) : QWidget(parent), detector(nullptr), fps(0) {
     setupLayout();
     setupVideo();
 
@@ -19,10 +21,17 @@ namespace mocam {
 
   Window::~Window() {
     session.stop();
+
+    if (detector) {
+      delete detector;
+    }
   }
 
   void Window::onFrameCaptured(FramePtr frame) {
     QImage img = frame->scaledToWidth(640);
+    MatPtr mat = Util::imageToMat(img);
+    QList<FacePtr> faces = detector->detect(mat);
+    Util::paintOverlays(img, faces);
     frameLbl->setPixmap(QPixmap::fromImage(img));
 
     static int frames = 0;
@@ -56,6 +65,14 @@ namespace mocam {
       return;
     }
     setTitle();
+
+    // TODO: Do this smarter about the files!
+    detector = new FaceDetector("lbpcascade_frontalface.xml",
+                                "haarcascade_eye_tree_eyeglasses.xml");
+    if (!detector->isValid()) {
+      QMessageBox::warning(this, "", tr("Could not initialize face detector!"));
+      return;
+    }
 
     device->init();
     if (!session.setDevice(device)) {

@@ -25,9 +25,8 @@ namespace mocam {
 
     static QRect toQRect(const cv::Rect &rect);
 
-    static bool saveOverlays(const QString &outFile, QImage &image,
-                             const QList<FacePtr> &faces, bool noFaces = false,
-                             bool noEyes = false);
+    static void paintOverlays(QImage &image, const QList<FacePtr> &faces,
+                              bool noFaces = false, bool noEyes = false);
     
     static bool exportFacesXml(const QString &outFile,
                                const QList<FacePtr> &faces);
