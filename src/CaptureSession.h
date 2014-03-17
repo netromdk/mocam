@@ -27,6 +27,9 @@ namespace mocam {
      */
     QImage getSnapshot(int widht = -1, int height = -1);
 
+    void start();
+    void stop();
+
     void close();
 
   private:

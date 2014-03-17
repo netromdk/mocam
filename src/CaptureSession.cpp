@@ -27,6 +27,14 @@ namespace mocam {
     return img;
   }
 
+  void CaptureSession::start() {
+    impl->start();
+  }
+
+  void CaptureSession::stop() {
+    impl->stop();
+  }
+
   void CaptureSession::close() {
     impl->close();
   }

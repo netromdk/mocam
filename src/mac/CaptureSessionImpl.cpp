@@ -33,16 +33,12 @@ namespace mocam {
   }
 
   QImage CaptureSessionImpl::getSnapshot() {
-    // Create the device the first time it's needed and reuse it as
-    // long as possible.
-    if (!handleOutput) {
-      handleOutput = _setupSessionOutput(handleSession);
-    }
-
+    start();
+    
     int len;
-    _startSession(handleSession);
     const unsigned char *imgData = _getSnapshot(handleOutput, len);
-    _stopSession(handleSession);
+
+    stop();
 
     if (!imgData) return QImage();
 
@@ -50,6 +46,20 @@ namespace mocam {
     delete[] imgData;
     
     return img;
+  }
+
+  void CaptureSessionImpl::start() {
+    // Create the device the first time it's needed and reuse it as
+    // long as possible.
+    if (!handleOutput) {
+      handleOutput = _setupSessionOutput(handleSession);
+    }
+    
+    _startSession(handleSession);
+  }
+  
+  void CaptureSessionImpl::stop() {
+    _stopSession(handleSession);    
   }
 
   void CaptureSessionImpl::close() {

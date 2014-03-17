@@ -18,6 +18,8 @@ namespace mocam {
 
     bool setDevice(VDPtr device);
     QImage getSnapshot();
+    void start();
+    void stop();    
     void close();    
 
   private:
