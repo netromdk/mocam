@@ -74,7 +74,8 @@ namespace mocam {
   
   void CaptureSessionImpl::stop() {
     if (grabber) {
-      grabber->terminate();
+      grabber->requestInterruption();
+      grabber->wait();
       grabber->deleteLater();
       grabber = nullptr;
     }

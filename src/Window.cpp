@@ -21,7 +21,6 @@ namespace mocam {
   }
 
   void Window::onFrameCaptured(FramePtr frame) {
-    session.stop();
     frameLbl->setPixmap(QPixmap::fromImage(*frame));
   }
 

@@ -8,6 +8,11 @@ namespace mocam {
 
   void FrameGrabber::run() {
     for (;;) {
+      // Stop when requested.
+      if (isInterruptionRequested()) {
+        return;
+      }
+
       QImage img = session->getSnapshot(false);
       emit frameCaptured(FramePtr(new QImage(img)));
     }
