@@ -22,7 +22,14 @@ namespace mocam {
     ~CaptureSessionImpl();
 
     bool setDevice(VDPtr device);
+
+    /**
+     * The 'startSession' argument dictates whether the session will
+     * be started/stopped for each invocation. Should be false when
+     * streaming.
+     */
     QImage getSnapshot(bool startSession = true);
+
     void start(bool stream = true);
     void stop();    
     void close();
