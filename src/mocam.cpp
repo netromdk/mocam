@@ -1,15 +1,13 @@
 #include <QApplication>
 
+#include "Types.h"
 #include "Window.h"
 
 int main(int argc, char **argv) {
   QApplication app(argc, argv);
 
+  mocam::initTypes();
   mocam::Window win;
-  win.resize(512, 512);
-  win.show();
-  win.raise();
-  win.activateWindow();
   
   return app.exec();
 }

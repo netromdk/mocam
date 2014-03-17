@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+#include "Types.h"
 #include "VideoDevice.h"
 #include "CaptureSession.h"
 
@@ -10,9 +11,14 @@ class QLabel;
 
 namespace mocam {
   class Window : public QWidget {
+    Q_OBJECT
+    
   public:
     Window(QWidget *parent = nullptr);
     ~Window();
+
+  private slots:
+    void onFrameCaptured(FramePtr frame);
 
   private:
     void setupLayout();

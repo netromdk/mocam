@@ -1,9 +1,10 @@
 #include "MacUtil.h"
+#include "FrameGrabber.h"
 #include "CaptureSessionImpl.h"
 
 namespace mocam {
   CaptureSessionImpl::CaptureSessionImpl()
-    : handleInput(nullptr), handleOutput(nullptr)
+    : handleInput(nullptr), handleOutput(nullptr), grabber(nullptr)
   {
     handleSession = _getSessionHandle();
   }
@@ -32,13 +33,17 @@ namespace mocam {
     return true;
   }
 
-  QImage CaptureSessionImpl::getSnapshot() {
-    start();
+  QImage CaptureSessionImpl::getSnapshot(bool startSession) {
+    if (startSession) {
+      start(false);
+    }
     
     int len;
     const unsigned char *imgData = _getSnapshot(handleOutput, len);
 
-    stop();
+    if (startSession) {
+      stop();
+    }
 
     if (!imgData) return QImage();
 
@@ -48,7 +53,7 @@ namespace mocam {
     return img;
   }
 
-  void CaptureSessionImpl::start() {
+  void CaptureSessionImpl::start(bool stream) {
     // Create the device the first time it's needed and reuse it as
     // long as possible.
     if (!handleOutput) {
@@ -56,6 +61,15 @@ namespace mocam {
     }
     
     _startSession(handleSession);
+
+    if (stream) {
+      // TODO: handle if one is already running.
+      grabber = new FrameGrabber(this);
+      connect(grabber, SIGNAL(frameCaptured(FramePtr)),
+              SIGNAL(frameCaptured(FramePtr)));
+      connect(grabber, SIGNAL(finished()), grabber, SLOT(deleteLater()));
+      grabber->start();
+    }
   }
   
   void CaptureSessionImpl::stop() {

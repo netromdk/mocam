@@ -3,6 +3,8 @@
 namespace mocam {
   CaptureSession::CaptureSession() {
     impl = ImplCSPtr(new CaptureSessionImpl);
+    connect(impl.get(), SIGNAL(frameCaptured(FramePtr)),
+            SIGNAL(frameCaptured(FramePtr)));
   }
 
   bool CaptureSession::setDevice(VDPtr device) {
@@ -27,8 +29,8 @@ namespace mocam {
     return img;
   }
 
-  void CaptureSession::start() {
-    impl->start();
+  void CaptureSession::start(bool stream) {
+    impl->start(stream);
   }
 
   void CaptureSession::stop() {

@@ -47,6 +47,7 @@ ADD_EXECUTABLE(
   ${NAME}.cpp
 
   Types.h
+  Types.cpp
 
   Util.h
   Util.cpp
@@ -81,6 +82,9 @@ IF (APPLE)
 
     mac/CaptureSessionImpl.h
     mac/CaptureSessionImpl.cpp
+
+    mac/FrameGrabber.h
+    mac/FrameGrabber.cpp
     )
 ENDIF()
 
@@ -89,6 +93,9 @@ SET(NAME mocam)
 ADD_EXECUTABLE(
   ${NAME}
   ${NAME}.cpp
+
+  Types.h
+  Types.cpp
 
   Window.h
   Window.cpp

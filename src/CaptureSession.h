@@ -2,9 +2,11 @@
 #define MOCAM_CAPTURE_SESSION_H
 
 #include <QImage>
+#include <QObject>
 
 #include <memory>
 
+#include "Types.h"
 #include "VideoDevice.h"
 #include "CaptureSessionImpl.h"
 
@@ -12,7 +14,9 @@ namespace mocam {
   class CaptureSession;
   typedef std::shared_ptr<CaptureSession> CSPtr;
   
-  class CaptureSession {
+  class CaptureSession : public QObject {
+    Q_OBJECT
+    
   public:
     CaptureSession();
 
@@ -27,10 +31,13 @@ namespace mocam {
      */
     QImage getSnapshot(int widht = -1, int height = -1);
 
-    void start();
+    void start(bool stream = true);
     void stop();
 
     void close();
+
+  signals:
+    void frameCaptured(FramePtr frame);
 
   private:
     ImplCSPtr impl;
