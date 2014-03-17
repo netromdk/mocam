@@ -16,6 +16,9 @@ IF (APPLE)
 
     mac/CaptureSessionImpl.h
     mac/CaptureSessionImpl.cpp
+
+    mac/FrameGrabber.h
+    mac/FrameGrabber.cpp
     )
 ENDIF()
 

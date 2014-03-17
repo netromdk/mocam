@@ -15,6 +15,7 @@ namespace mocam {
 
       QImage img = session->getSnapshot(false);
       emit frameCaptured(FramePtr(new QImage(img)));
+      usleep(512);
     }
   }
 }

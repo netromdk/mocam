@@ -9,11 +9,12 @@
 #include "FaceDetector.h"
 
 namespace mocam {
-  Window::Window(QWidget *parent) : QWidget(parent), detector(nullptr), fps(0) {
+  Window::Window(QWidget *parent) :
+    QWidget(parent), detector(nullptr), fps(0)
+  {
     setupLayout();
     setupVideo();
 
-    resize(512, 512);
     show();
     raise();
     activateWindow();    
@@ -28,7 +29,7 @@ namespace mocam {
   }
 
   void Window::onFrameCaptured(FramePtr frame) {
-    QImage img = frame->scaledToWidth(640);
+    QImage img = frame->scaledToWidth(480);
     MatPtr mat = Util::imageToMat(img);
     QList<FacePtr> faces = detector->detect(mat);
     Util::paintOverlays(img, faces);
